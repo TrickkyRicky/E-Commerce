@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 
-const Auth = () => {
+const NotFound = () => {
   return (
     <Fragment>
-      <p>This is the Auth page</p>
+      <p>This is the NotFound page</p>
     </Fragment>
   );
 };
 
-export default Auth;
+export default NotFound;

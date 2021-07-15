@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 
-const Auth = () => {
+const Products = () => {
   return (
     <Fragment>
-      <p>This is the Auth page</p>
+      <p>This is the Products page</p>
     </Fragment>
   );
 };
 
-export default Auth;
+export default Products;
