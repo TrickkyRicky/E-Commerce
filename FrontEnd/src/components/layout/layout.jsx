@@ -1,11 +1,15 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Header from "./header/Header";
+import Footer from "./footer/Footer";
+import classes from "./Layout.module.scss";
 
 const Layout = (props) => {
   return (
-    <Fragment>
+    <div className={classes.container}>
       <Header />
-    </Fragment>
+      <main>{props.children}</main>
+      <Footer />
+    </div>
   );
 };
 

@@ -1,10 +1,12 @@
-import React, { Fragment } from "react";
+import React from "react";
+import classes from "./Home.module.scss";
+import Hero from "../../components/UI/heroSlider/Hero";
 
 const Home = () => {
   return (
-    <Fragment>
-      <p>This is the Home page</p>
-    </Fragment>
+    <div className={classes.container}>
+      <Hero />
+    </div>
   );
 };
 

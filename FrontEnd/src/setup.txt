@@ -1,0 +1,11 @@
+import React from "react";
+import classes from "./?.module.scss";
+
+const ? = (props) => {
+  return (
+    <div>
+    </div>
+  );
+};
+
+export default ?;

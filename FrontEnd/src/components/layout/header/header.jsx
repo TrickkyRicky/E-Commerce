@@ -1,23 +1,33 @@
-import React from "react";
+import React, { Fragment } from "react";
 import classes from "./Header.module.scss";
+import AnnouceBar from "./AnnounceBar.jsx";
+import Logo from "../../../assets/theLogo.png";
 
 const Header = (props) => {
   return (
     // wrapper
-    <div>
+    <Fragment>
+      <AnnouceBar />
       {/* content container */}
-      <div>
+      <nav className={classes.container}>
         {/* content */}
         <div>
-          <p>Logo / Home Link</p>
-          <p>Shop Link</p>
-          <p>My Products Link</p>
+          <a href="/shop">Men Link</a>
+          <a href="/shop">Woman Link</a>
         </div>
         <div>
-          <p>Login Link</p>
+          <a href="/">
+            <img src={Logo} alt="Logo" />
+          </a>
         </div>
-      </div>
-    </div>
+        <div>
+          <a href="/">Login / Logout Link</a>
+          {/* Will show my products when Authenticated */}
+          {/* <a href="/">My products Link</a> */}
+          <a href="/">Cart Link</a>
+        </div>
+      </nav>
+    </Fragment>
   );
 };
 
