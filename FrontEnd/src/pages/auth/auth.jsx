@@ -1,3 +1,4 @@
+// login and signup page
 import React, { Fragment } from "react";
 
 const Auth = () => {

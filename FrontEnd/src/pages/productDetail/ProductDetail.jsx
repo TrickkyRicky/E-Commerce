@@ -1,3 +1,4 @@
+// View the price and stats on the product screen
 import React, { Fragment } from "react";
 
 const ProductDetail = () => {

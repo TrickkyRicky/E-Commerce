@@ -1,3 +1,4 @@
+// Any route not found relays to this page
 import React, { Fragment } from "react";
 
 const NotFound = () => {

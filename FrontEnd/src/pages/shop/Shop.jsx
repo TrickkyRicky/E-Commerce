@@ -1,3 +1,4 @@
+// shop for the e-commerce store that will filter and categories products
 import React, { Fragment } from "react";
 
 const Shop = () => {
