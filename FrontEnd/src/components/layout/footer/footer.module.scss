@@ -1,8 +1,41 @@
+@import "../../../scss/variables.scss";
+
 .container {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: skyblue;
+  background-color: $primary-color;
+  height: 100%;
+  min-height: 20vh;
+
+  .icons {
+    padding-top: $footer-py;
+    a {
+      margin: 0 1.5rem;
+    }
+  }
+
+  .download {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding: 1.8rem 0;
+    a {
+      width: 128px;
+      margin: 0 1.5rem;
+    }
+    img {
+      max-width: 100%;
+      height: 39px;
+    }
+  }
+  .terms {
+    padding-bottom: $footer-py;
+    p {
+      color: white;
+      font-size: 1.15rem;
+    }
+  }
 }
