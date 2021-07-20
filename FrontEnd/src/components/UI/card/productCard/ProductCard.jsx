@@ -8,7 +8,7 @@ const ProductCard = (props) => {
       {/* href will take product to link with product id */}
       <a href="/">
         {/* the img take will take in the props for the image from the array */}
-        <img className={classes.image} src={IMG} />
+        <img className={classes.image} src={IMG} alt="Something" />
         {/* this div will take in content from the product information in db */}
         <div className={classes.productInfo}>
           <h5>Not Avaible N/A</h5>
