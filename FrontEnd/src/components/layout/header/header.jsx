@@ -18,25 +18,25 @@ const Header = (props) => {
       image: IMG,
       name: "N/A",
       color: "N/A",
-      id: "N/A",
+      id: 1,
     },
     {
       image: IMG,
       name: "N/A",
       color: "N/A",
-      id: "N/A",
+      id: 2,
     },
     {
       image: IMG,
       name: "N/A",
       color: "N/A",
-      id: "N/A",
+      id: 3,
     },
     {
       image: IMG,
       name: "N/A",
       color: "N/A",
-      id: "N/A",
+      id: 4,
     },
   ];
 
@@ -128,7 +128,7 @@ const Header = (props) => {
           <div style={expand.prod} className={classes.categories}>
             <h4>Categories</h4>
             {choice.map((catName) => (
-              <a href="/" className={classes.catFont}>
+              <a key={catName} href="/" className={classes.catFont}>
                 {catName}
               </a>
             ))}
@@ -136,7 +136,7 @@ const Header = (props) => {
           <div style={expand.prod} className={classes.content}>
             {products.map((product) => {
               return (
-                <figure>
+                <figure key={product.id}>
                   {/* id will go in href for link to shop */}
                   <a href="/">
                     <img src={product.image} alt={product.name} />
