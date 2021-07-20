@@ -1,0 +1,11 @@
+.wrapper {
+  .imgContainer {
+    width: 100%;
+    height: 525px;
+    img {
+      object-fit: fill;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
