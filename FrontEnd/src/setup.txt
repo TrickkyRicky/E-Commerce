@@ -9,3 +9,6 @@ const ? = (props) => {
 };
 
 export default ?;
+
+scss 
+@import "../../scss/variables.scss";
