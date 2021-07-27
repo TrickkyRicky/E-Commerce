@@ -1,11 +1,18 @@
 // shop for the e-commerce store that will filter and categories products
-import React, { Fragment } from "react";
+import React from "react";
+import ShopLayout from "../../components/layout/shop/ShopLayout";
+import classes from "./Shop.module.scss";
+import IMG from "../../assets/clothing-banner2.jpg";
 
 const Shop = () => {
   return (
-    <Fragment>
-      <p>This is the Shop page</p>
-    </Fragment>
+    <div className={classes.container}>
+      <div className={classes.imageContainer}>
+        <h4>Shop</h4>
+        <img src={IMG} alt="Shop Banner" />
+      </div>
+      <ShopLayout />
+    </div>
   );
 };
 

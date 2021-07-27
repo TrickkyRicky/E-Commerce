@@ -5,6 +5,7 @@ import Hero from "../../components/UI/heroSlider/Hero";
 import NewProducts from "../../components/content/newProducts/NewProducts";
 
 const Home = () => {
+  
   return (
     <div className={classes.container}>
       <Hero />
