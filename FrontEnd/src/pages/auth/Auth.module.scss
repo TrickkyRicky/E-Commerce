@@ -1,0 +1,35 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  background-image: linear-gradient(315deg, #18171d 0%, #8b939a 74%);
+  position: relative;
+  overflow: hidden;
+
+  li {
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.2);
+    width: 500px;
+    height: 500px;
+    display: inline-block;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 3px #fff;
+
+    &:nth-child(1) {
+      transform: rotate(145deg);
+      left: -15%;
+      top: -10%;
+    }
+    &:nth-child(2) {
+      transform: rotate(130deg);
+      left: 20%;
+      top: 95%;
+    }
+    &:nth-child(3) {
+      left: 92%;
+      transform: rotate(155deg);
+      width: 350px;
+      height: 650px;
+    }
+  }
+}
