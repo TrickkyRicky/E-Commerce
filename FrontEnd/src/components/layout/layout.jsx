@@ -5,12 +5,23 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import classes from "./Layout.module.scss";
 
+import { useLocation } from "react-router-dom";
+
 const Layout = (props) => {
+  const location = useLocation();
+  let noHeadOrFoot;
+
+  if (location.pathname.includes("/auth")) {
+    noHeadOrFoot = true;
+  } else {
+    noHeadOrFoot = false;
+  }
+
   return (
     <div className={classes.container}>
-      <Header />
+      <Header isAuth={noHeadOrFoot} />
       <main>{props.children}</main>
-      <Footer />
+      <Footer isAuth={noHeadOrFoot} />
     </div>
   );
 };
