@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { adminActions } from "../../../store/admin/admin-slice";
-import classes from "./ProductModal.module.scss";
+import classes from "./Modals.module.scss";
 
-const ProductModal = (props) => {
-  const isOpen = useSelector((state) => state.admin.modal);
+const EditModal = (props) => {
+  const isOpen = useSelector((state) => state.admin.modalE);
   const dispatch = useDispatch();
 
   const closeModalHandler = () => {
-    dispatch(adminActions.setModal(false));
+    dispatch(adminActions.setModalE(false));
   };
 
   return (
@@ -21,4 +21,4 @@ const ProductModal = (props) => {
   );
 };
 
-export default ProductModal;
+export default EditModal;

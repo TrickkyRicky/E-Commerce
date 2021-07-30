@@ -42,6 +42,9 @@ const productSchema = new Schema(
     sale: {
       type: Number,
     },
+    salePrice: {
+      type: Number,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",

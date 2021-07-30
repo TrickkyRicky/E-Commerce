@@ -139,6 +139,8 @@ export const editProduct = (
   med,
   large,
   xl,
+  sale,
+  salePrice,
   jwt,
   id
 ) => {
@@ -156,6 +158,8 @@ export const editProduct = (
     formData.append("med", med);
     formData.append("large", large);
     formData.append("xl", xl);
+    formData.append("sale", sale);
+    formData.append("sp", salePrice);
     const putData = async () => {
       const res = await fetch(
         "http://localhost:8080/admin/edit-product/" + id,
@@ -181,7 +185,7 @@ export const editProduct = (
     try {
       const result = await putData();
       dispatch(
-        adminActions.successfulEdit({
+        adminActions.successEdit({
           result: result,
         })
       );

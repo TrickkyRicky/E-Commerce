@@ -1,6 +1,6 @@
 import { shopActions } from "./shop-slice";
 
-export const getProducts = () => {
+export const getProducts = (location) => {
   return async (dispatch) => {
     dispatch(
       shopActions.setLoading({
@@ -17,9 +17,58 @@ export const getProducts = () => {
     };
     try {
       const result = await getData();
-    //   console.log(result);
+
+      if (location === "/home" || location === "/shop") {
+        dispatch(
+          shopActions.setAllIndividual({
+            products: result.products,
+          })
+        );
+        dispatch(
+          shopActions.setAllProd({
+            products: result.products,
+          })
+        );
+      } else {
+        dispatch(
+          shopActions.setAllIndividual({
+            products: result.products,
+          })
+        );
+      }
       dispatch(
-        shopActions.setAllProd({
+        shopActions.setLoading({
+          loading: false,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getCatProducts = (cat) => {
+  console.log(cat);
+  return async (dispatch) => {
+    dispatch(
+      shopActions.setLoading({
+        loading: true,
+      })
+    );
+    const getData = async () => {
+      const res = await fetch(
+        "http://localhost:8080/shop/cat-products?cat=" + cat
+      );
+
+      if (res.status !== 200) {
+        throw new Error("Failed to fetch products.");
+      }
+      return res.json();
+    };
+    try {
+      const result = await getData();
+      dispatch(
+        shopActions.setCatProd({
           products: result.products,
         })
       );
@@ -33,3 +82,53 @@ export const getProducts = () => {
     }
   };
 };
+
+export const getProductDetail = (id) => {
+  console.log(id);
+  return async (dispatch) => {
+    dispatch(
+      shopActions.setLoading({
+        loading: true,
+      })
+    );
+    const getData = async () => {
+      const res = await fetch(
+        "http://localhost:8080/shop/product-detail/" + id
+      );
+
+      if (res.status !== 200) {
+        throw new Error("Failed to fetch products.");
+      }
+      return res.json();
+    };
+    try {
+      const result = await getData();
+      console.log(result);
+      console.log(result.product);
+      dispatch(
+        shopActions.setProduct({
+          product: result.product,
+        })
+      );
+      dispatch(
+        shopActions.setLoading({
+          loading: false,
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+//   dispatch(
+//     shopActions.setAllIndividual({
+//       tShirts: filterProducts([...result.products], "shirt"),
+//       shorts: filterProducts([...result.products], "shorts"),
+//       pants: filterProducts([...result.products], "pants"),
+//       hats: filterProducts([...result.products], "hats"),
+//       tops: filterProducts([...result.products], "tops"),
+//       dresses: filterProducts([...result.products], "dresses"),
+//       skirts: filterProducts([...result.products], "skirts"),
+//       leggings: filterProducts([...result.products], "leggings"),
+//     })

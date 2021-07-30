@@ -109,6 +109,13 @@ exports.editUserProduct = async (req, res, next) => {
   const gender = req.body.gender;
   const description = req.body.description;
   let imageUrl = req.body.image;
+  let sale = undefined;
+  let salePrice = undefined;
+  console.log(req.body.sale);
+  if (req.body.sale !== undefined && req.body.sale > 0) {
+    sale = req.body.sale;
+    salePrice = req.body.sp;
+  }
 
   // checks to see if a file was sent meaning image would be change or could be the same
   if (req.file) {
@@ -131,8 +138,8 @@ exports.editUserProduct = async (req, res, next) => {
       throw error;
     }
     // checks if the image Url matches the one that is already saved
-    if (imageUrl !== post.imageUrl) {
-      clearImage(post.imageUrl);
+    if (imageUrl !== product.imageUrl) {
+      clearImage(product.imageUrl);
     }
 
     product.title = title;
@@ -147,6 +154,8 @@ exports.editUserProduct = async (req, res, next) => {
     product.gender = gender;
     product.description = description;
     product.imageUrl = imageUrl;
+    product.sale = sale;
+    product.salePrice = salePrice;
 
     const result = await product.save();
     res.status(200).json({
@@ -162,7 +171,7 @@ exports.editUserProduct = async (req, res, next) => {
 };
 
 exports.deleteUserProduct = async (req, res, next) => {
-  const prodId = req.params.postId;
+  const prodId = req.params.productId;
   try {
     const product = await Product.findById(prodId);
     if (!product) {
@@ -185,7 +194,7 @@ exports.deleteUserProduct = async (req, res, next) => {
     // user.posts.pull(postId);
     // await user.save();
 
-    res.status(200).json({ message: "Deleted Post" });
+    res.status(200).json({ message: "Deleted Product" });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

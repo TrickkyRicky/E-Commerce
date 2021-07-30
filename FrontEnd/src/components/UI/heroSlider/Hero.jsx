@@ -10,7 +10,8 @@ import classes from "./Hero.module.scss";
 
 import MenIMG from "../../../assets/polos_banner-edit.jpeg";
 import WomanIMG from "../../../assets/womanBanner.jpeg";
-import DownloadIMG from "../../../assets/D2.jpeg";
+import FashionIMG from "../../../assets/clothing-banner 5.jpeg";
+// import DownloadIMG from "../../../assets/D2.jpeg";
 
 const Hero = (props) => {
   let settings = {
@@ -28,8 +29,9 @@ const Hero = (props) => {
     <div className={classes.container}>
       <Slider {...settings}>
         <HeroCard img={MenIMG} imgName="Men Clothing Banner" />
-        <HeroCard img={WomanIMG} imgName="Woman Clothing Banner" />
-        <HeroCard img={DownloadIMG} imgName="Download Mobile App Now" />
+        {/* <HeroCard img={FashionIMG} imgName="Fashion" /> */}
+        {/* <HeroCard img={WomanIMG} imgName="Woman Clothing Banner" /> */}
+        {/* <HeroCard img={DownloadIMG} imgName="Download Mobile App Now" /> */}
       </Slider>
     </div>
   );

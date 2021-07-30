@@ -4,6 +4,8 @@ const adminSlice = createSlice({
   name: "admin",
   initialState: {
     modal: false,
+    modalE: false,
+    modalD: false,
     products: [],
     editProduct: [],
     isLoading: false,
@@ -11,6 +13,13 @@ const adminSlice = createSlice({
   reducers: {
     setModal(state, action) {
       state.modal = action.payload;
+    },
+    setModalE(state, action) {
+      console.log(action.payload);
+      state.modalE = action.payload;
+    },
+    setModalD(state, action) {
+      state.modalD = action.payload;
     },
 
     successCreation(state, action) {
@@ -24,7 +33,6 @@ const adminSlice = createSlice({
     },
 
     setUserProducts(state, action) {
-      console.log(action.payload.products);
       state.products = [...action.payload.products];
     },
     setEditProduct(state, action) {

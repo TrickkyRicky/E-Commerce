@@ -5,20 +5,82 @@
   a {
     text-decoration: none;
     color: black;
-    .image {
-      width: 280px;
-      height: 320px;
-      object-fit: contain;
+  }
+  .hover {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .btnContainer {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      button {
+        opacity: 0;
+        padding: 0.5rem;
+        transition: all 210ms ease-in-out;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.2;
+        text-transform: uppercase;
+        padding: 0 20px;
+        width: 100%;
+        height: 50px;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        border-radius: 25px;
+        background-color: lightgrey;
+        &:first-child {
+          margin-bottom: 2.5rem;
+        }
+
+        &:hover {
+          color: white;
+          background-color: #333;
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(-1px);
+          transition: all 0.3s;
+        }
+      }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      transition: height 200ms ease-in-out;
     }
 
-    .productInfo {
-      padding-top: 1rem;
-      h5 {
-        font-size: 1.3rem;
-      }
-      p {
-        font-size: 1.2rem;
-      }
+    &:hover::before {
+      height: 100%;
+      transition: height 200ms ease-in-out;
+    }
+  }
+  text-decoration: none;
+  color: black;
+  .image {
+    width: 280px;
+    height: 295px;
+    object-fit: contain;
+  }
+
+  .productInfo {
+    padding-top: 1rem;
+    h5 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 1.2rem;
     }
   }
 }

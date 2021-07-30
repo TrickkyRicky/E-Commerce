@@ -57,7 +57,7 @@ const App = () => {
             <Products />
           </Route>
         )}
-        <Route path="/productDetail/:productId">
+        <Route path="/productDetails/:productId">
           <ProductDetail />
         </Route>
         <Route path="*">

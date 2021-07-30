@@ -14,12 +14,6 @@ const NewProducts = (props) => {
   const products = useSelector((state) => state.shop.recentItems);
   const isLoading = useSelector((state) => state.shop.isLoading);
 
-  console.log(products);
-  console.log(isLoading);
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
-
   let content = (
     <Fragment>
       <LoadingCard /> <LoadingCard /> <LoadingCard /> <LoadingCard />
@@ -29,6 +23,7 @@ const NewProducts = (props) => {
     content = products.map((product) => (
       <ProductCard
         key={product._id}
+        id={product._id}
         title={product.title}
         img={product.imageUrl}
         price={product.price}

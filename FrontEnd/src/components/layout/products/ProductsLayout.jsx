@@ -13,8 +13,12 @@ import { adminActions } from "../../../store/admin/admin-slice";
 
 import ProductCard from "../../UI/card/productCard/ProductCard";
 import LoadingCard from "../../UI/card/loadingCard/LoadingCard";
-import ProductModal from "../../modals/productModal/ProductModal";
+import AddModal from "../../modals/productModal/AddModal";
+import EditModal from "../../modals/productModal/EditModal";
+import DeleteModal from "../../modals/productModal/DeleteModal";
 import AddProduct from "./form/AddProduct";
+import EditProduct from "./form/EditProduct";
+import DeleteProduct from "./form/DeleteProduct.jsx";
 
 import { BiPlusCircle } from "react-icons/bi";
 import classes from "./ProductsLayout.module.scss";
@@ -35,6 +39,8 @@ const ProductsLayout = (props) => {
   const products = useSelector((state) => state.admin.products);
   const isLoading = useSelector((state) => state.admin.isLoading);
   const isOpen = useSelector((state) => state.admin.modal);
+  const isME = useSelector((state) => state.admin.modalE);
+  const isMD = useSelector((state) => state.admin.modalD);
   const jwt = useSelector((state) => state.auth.jwtToken);
 
   //   this will be replaced by calling a request to load in all men t-shirt products and then it will change based on clicks
@@ -45,7 +51,7 @@ const ProductsLayout = (props) => {
   }, [dispatch, jwt, cat]);
 
   // effect is needed to use scroll on full component render
-  // then on component unmount we remove event listerner
+  // then on component unmount we remove event listener
   useEffect(() => {
     window.addEventListener("scroll", function (e) {
       setScroll(e.target.scrollingElement.scrollTop);
@@ -100,30 +106,19 @@ const ProductsLayout = (props) => {
       <div className={classes.spacing}>
         <LoadingCard />
       </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
     </Fragment>
   );
 
-  console.log(isLoading);
   if (!isLoading) {
     content = products.map((product) => (
       <div className={classes.spacing} key={product._id}>
         <ProductCard
+          id={product._id}
           img={product.imageUrl}
           title={product.title}
           color={product.color}
           price={product.price}
+          disabled={false}
         />
       </div>
     ));
@@ -132,12 +127,23 @@ const ProductsLayout = (props) => {
   const createProdHandler = () => {
     dispatch(adminActions.setModal(true));
   };
+
   return (
     <Fragment>
       {isOpen && (
-        <ProductModal>
+        <AddModal>
           <AddProduct />
-        </ProductModal>
+        </AddModal>
+      )}
+      {isME && (
+        <EditModal>
+          <EditProduct />
+        </EditModal>
+      )}
+      {isMD && (
+        <DeleteModal>
+          <DeleteProduct />
+        </DeleteModal>
       )}
       <div className={classes.container}>
         <div className={classes.createContainer}>

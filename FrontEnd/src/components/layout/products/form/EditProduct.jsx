@@ -1,11 +1,11 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addProduct } from "../../../../store/admin/admin-actions.js";
+import { editProduct } from "../../../../store/admin/admin-actions.js";
 import { CgSoftwareUpload } from "react-icons/cg";
 import { generateBase64FromImage } from "../../../../util/image.js";
 import classes from "./AddProduct.module.scss";
 
-const AddProduct = (props) => {
+const EditProduct = (props) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [color, setColor] = useState("");
@@ -18,25 +18,63 @@ const AddProduct = (props) => {
   const [medium, setMedium] = useState("");
   const [xlarge, setXlarge] = useState("");
   const [large, setLarge] = useState("");
+  const [sale, setSale] = useState("");
+  const [salePrice, setSalePrice] = useState("");
 
-  const [imgVal, setImgVal] = useState(null);
+  const [imgVal, setImgVal] = useState("");
   const [imgIconColor, setImgIconColor] = useState("black");
 
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [theColor, setTheColor] = useState({});
-
   const jwt = useSelector((state) => state.auth.jwtToken);
+  const product = useSelector((state) => state.admin.editProduct[0]);
   const dispatch = useDispatch();
 
-  let options = null;
-
-  const onSelectChangeHandler = (e) => {
-    if (e.target.name === "gender") {
-      setGender(e.target.value);
-      setIsDisabled(false);
-      setTheColor({ color: "#333" });
+  useEffect(() => {
+    if (product !== undefined) {
+      setTitle(product.title);
+      setPrice(product.price);
+      setColor(product.color);
+      setGender(product.gender);
+      setCategory(product.category);
+      setImage(product.imageUrl);
+      setImgVal(`http://localhost:8080/${product.imageUrl}`);
+      setDescription(product.description);
+      setXsmall(product.stock.xsmall);
+      setSmall(product.stock.small);
+      setMedium(product.stock.medium);
+      setLarge(product.stock.large);
+      setXlarge(product.stock.xlarge);
+      if (product.sale !== undefined && product.sale > 0) {
+        setSale(product.sale);
+        setSalePrice(product.price - (product.price * product.sale) / 100);
+      }
     }
-  };
+  }, [
+    setTitle,
+    setPrice,
+    setColor,
+    setCategory,
+    setImage,
+    setImgVal,
+    setGender,
+    setDescription,
+    setXsmall,
+    setSmall,
+    setMedium,
+    setLarge,
+    setXlarge,
+    setSale,
+    setSalePrice,
+    product,
+  ]);
+  let equationString = null;
+  if (sale > 0) {
+    equationString = (
+      <Fragment>
+        <p>Sales Price: {salePrice}</p>
+      </Fragment>
+    );
+  }
+  let options = null;
 
   if (gender === "Male") {
     options = (
@@ -64,9 +102,13 @@ const AddProduct = (props) => {
     }
     if (e.target.name === "price") {
       setPrice(e.target.value);
+      setSalePrice(e.target.value - (e.target.value * sale) / 100);
     }
     if (e.target.name === "color") {
       setColor(e.target.value);
+    }
+    if (e.target.name === "gender") {
+      setGender(e.target.value);
     }
     if (e.target.name === "category") {
       setCategory(e.target.value);
@@ -99,32 +141,15 @@ const AddProduct = (props) => {
     if (e.target.name === "xl") {
       setXlarge(e.target.value);
     }
+    if (e.target.name === "sale") {
+      setSale(e.target.value);
+      setSalePrice(price - (price * e.target.value) / 100);
+    }
   };
-
-  let imageUpload = null;
-  if (imgVal) {
-    imageUpload = <img src={imgVal} alt="uploaded content" />;
-  }
-
-  const onSubmitHandler = (
-    e,
-    title,
-    color,
-    price,
-    gender,
-    category,
-    image,
-    description,
-    xsmall,
-    small,
-    medium,
-    large,
-    xlarge,
-    jwt
-  ) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      addProduct(
+      editProduct(
         title,
         color,
         price,
@@ -137,34 +162,16 @@ const AddProduct = (props) => {
         medium,
         large,
         xlarge,
-        jwt
+        sale,
+        salePrice,
+        jwt,
+        product._id
       )
     );
   };
-  console.log(jwt);
   return (
-    <form
-      className={classes.container}
-      onSubmit={(e) =>
-        onSubmitHandler(
-          e,
-          title,
-          color,
-          price,
-          gender,
-          category,
-          image,
-          description,
-          xsmall,
-          small,
-          medium,
-          large,
-          xlarge,
-          jwt
-        )
-      }
-    >
-      <h2>Create Product</h2>
+    <form className={classes.container} onSubmit={(e) => onSubmitHandler(e)}>
+      <h2>Edit Product</h2>
       {/* product title */}
       <div className={classes.row1}>
         <p>Title</p>
@@ -212,13 +219,10 @@ const AddProduct = (props) => {
             required
             id="gender"
             name="gender"
-            onChange={(e) => onSelectChangeHandler(e)}
-            style={theColor}
-            defaultValue="Select a Gender"
+            className={classes.edit}
+            onChange={inputChangeHandler}
+            value={gender}
           >
-            <option disabled hidden>
-              Select a Gender
-            </option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -228,15 +232,11 @@ const AddProduct = (props) => {
           <select
             id="category"
             name="category"
-            disabled={isDisabled}
-            style={theColor}
             required
+            className={classes.edit}
             onChange={inputChangeHandler}
-            defaultValue="Select a Category"
+            value={category}
           >
-            <option disabled hidden>
-              Select a Category
-            </option>
             {options}
           </select>
         </div>
@@ -271,7 +271,7 @@ const AddProduct = (props) => {
           onChange={inputChangeHandler}
           //   required
         />
-        {imageUpload}
+        <img src={imgVal} alt="uploaded" />
       </div>
       {/* description */}
       <div className={classes.row5}>
@@ -331,9 +331,26 @@ const AddProduct = (props) => {
         </div>
       </div>
 
-      <button>Create</button>
+      <div className={classes.row7Container}>
+        <p>Product Sale</p>
+        <div className={classes.row7}>
+          {/* input that holds sales */}
+          <input
+            type="number"
+            name="sale"
+            placeholder="Sale % Off"
+            onChange={inputChangeHandler}
+            value={sale}
+            min={0}
+            max={50}
+          />
+          {equationString}
+        </div>
+      </div>
+
+      <button>Edit</button>
     </form>
   );
 };
 
-export default AddProduct;
+export default EditProduct;

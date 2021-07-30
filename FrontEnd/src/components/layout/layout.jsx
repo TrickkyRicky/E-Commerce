@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 const Layout = (props) => {
   const location = useLocation();
+  
   let noHeadOrFoot;
 
   if (location.pathname.includes("/auth")) {
