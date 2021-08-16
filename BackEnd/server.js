@@ -47,7 +47,9 @@ const fileFilter = (req, file, cb) => {
 
 // might change back to bodyParser.json() <---is deprecated
 server.use(express.json());
-
+if (process.env.NODE_ENV === "production") {
+  server.use(express.static("../FrontEnd/build"));
+}
 // uses the defined filter and storage abouve to parse image into place
 server.use(
   multer({
