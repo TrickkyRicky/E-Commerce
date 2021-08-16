@@ -1,11 +1,5 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  Fragment,
-} from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, Fragment } from "react";
+import { NavLink, useHistory } from "react-router-dom";
 import { useQuery } from "../../../hooks/hooks.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProducts } from "../../../store/admin/admin-actions.js";
@@ -22,87 +16,54 @@ import DeleteProduct from "./form/DeleteProduct.jsx";
 
 import { BiPlusCircle } from "react-icons/bi";
 import classes from "./ProductsLayout.module.scss";
+import ErrorModal from "../../modals/errorModal/ErrorModal.jsx";
 
 const ProductsLayout = (props) => {
-  const scrollRef = useRef();
-  const bottomRef = useRef();
-
-  // holds the scroll of the window
-  const [scroll, setScroll] = useState(0);
-  // gets the position from the top of the scroll for the div on load
-  const [scrollDiv, setScrollDiv] = useState(0);
-  // gets position of bottom div to know when to take off class
-  const [scrollDivBottom, setScrollDivBottom] = useState(0);
-
   const query = useQuery();
+  const history = useHistory();
   const dispatch = useDispatch();
+
   const products = useSelector((state) => state.admin.products);
   const isLoading = useSelector((state) => state.admin.isLoading);
   const isOpen = useSelector((state) => state.admin.modal);
   const isME = useSelector((state) => state.admin.modalE);
   const isMD = useSelector((state) => state.admin.modalD);
+  const isError = useSelector((state) => state.admin.modalError);
+
   const jwt = useSelector((state) => state.auth.jwtToken);
+
+  const [a1, setA1] = useState(null);
+  const [a2, setA2] = useState(null);
+  const [a3, setA3] = useState(null);
+  const [a4, setA4] = useState(null);
+  const [a5, setA5] = useState(null);
+  const [a6, setA6] = useState(null);
+  const [a7, setA7] = useState(null);
+  const [a8, setA8] = useState(null);
 
   //   this will be replaced by calling a request to load in all men t-shirt products and then it will change based on clicks
   const cat = query.get("cat");
   useEffect(() => {
     dispatch(adminActions.setLoading(true));
-    dispatch(getUserProducts(cat, jwt));
-  }, [dispatch, jwt, cat]);
-
-  // effect is needed to use scroll on full component render
-  // then on component unmount we remove event listener
-  useEffect(() => {
-    window.addEventListener("scroll", function (e) {
-      setScroll(e.target.scrollingElement.scrollTop);
-    });
-
-    return () => {
-      window.removeEventListener("scroll", function (e) {
-        setScroll(e.target.scrollingElement.scrollTop);
-      });
-    };
-  }, [setScroll]);
-
-  // try using use callback to stop error
-  const getScrollHandler = useCallback(() => {
-    setScrollDiv(scrollRef.current.getBoundingClientRect().y);
-    setScrollDivBottom(bottomRef.current.getBoundingClientRect().y);
-  }, []);
-
-  // i dont set a dependcy here because i only want this function to run one time everytime the component renders
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      // need this to reset scroll positioning so that the if condition can execute clearly
-      window.scrollTo(0, 0);
-      getScrollHandler();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [getScrollHandler]);
-
-  let style = {};
-  let replaceNav = null;
-
-  // console.log(scrollDivBottom - scrollDiv + 200);
-  if (scroll > scrollDivBottom - scrollDiv + 225) {
-    style = { alignSelf: "flex-end" };
-    replaceNav = null;
-  } else if (scroll > scrollDiv - 10) {
-    style = { position: "fixed", top: "10px" };
-    replaceNav = <div></div>;
-  }
+    const categories = [
+      "shirt",
+      "shorts",
+      "pants",
+      "hats",
+      "tops",
+      "dresses",
+      "skirts",
+      "leggings",
+    ];
+    if (categories.includes(cat)) {
+      dispatch(getUserProducts(cat, jwt));
+    } else {
+      history.replace("/*");
+    }
+  }, [dispatch, jwt, cat, history]);
 
   let content = (
     <Fragment>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
-      <div className={classes.spacing}>
-        <LoadingCard />
-      </div>
       <div className={classes.spacing}>
         <LoadingCard />
       </div>
@@ -118,18 +79,89 @@ const ProductsLayout = (props) => {
           title={product.title}
           color={product.color}
           price={product.price}
+          sale={product.sale}
+          salePrice={product.salePrice}
           disabled={false}
         />
       </div>
     ));
   }
 
+  if (products.length === 0 && isLoading === false) {
+    content = (
+      <div className={classes.emptyMessage}>
+        <h3>
+          You currently have no {cat} products, please create a product by
+          clicking the plus button.
+        </h3>
+      </div>
+    );
+  }
+
+  const clearActive = () => {
+    setA1(null);
+    setA2(null);
+    setA3(null);
+    setA4(null);
+    setA5(null);
+    setA6(null);
+    setA7(null);
+    setA8(null);
+  };
+
+  useEffect(() => {
+    clearActive();
+    switch (cat) {
+      case "shirt":
+        setA1(classes.selected);
+        break;
+      case "shorts":
+        setA2(classes.selected);
+        break;
+      case "pants":
+        setA3(classes.selected);
+        break;
+      case "hats":
+        setA4(classes.selected);
+        break;
+      case "tops":
+        setA5(classes.selected);
+        break;
+      case "dresses":
+        setA6(classes.selected);
+        break;
+      case "skirts":
+        setA7(classes.selected);
+        break;
+      case "leggings":
+        setA8(classes.selected);
+        break;
+      default:
+        clearActive();
+    }
+  }, [cat]);
+
+  const filterChangeHandler = (e) => {
+    if (e.target.value === "date") {
+      dispatch(adminActions.filterCatProd("date"));
+    }
+    if (e.target.value === "sale") {
+      dispatch(adminActions.filterCatProd("sale"));
+    }
+    if (e.target.value === "low") {
+      dispatch(adminActions.filterCatProd("low"));
+    }
+    if (e.target.value === "high") {
+      dispatch(adminActions.filterCatProd("high"));
+    }
+  };
   const createProdHandler = () => {
     dispatch(adminActions.setModal(true));
   };
 
   return (
     <Fragment>
+      {isError && <ErrorModal />}
       {isOpen && (
         <AddModal>
           <AddProduct />
@@ -154,23 +186,46 @@ const ProductsLayout = (props) => {
             onClick={createProdHandler}
           />
         </div>
-        <div className={classes.contentContainer} ref={scrollRef}>
-          {replaceNav}
+        <div className={classes.filterContainer}>
+          <select onChange={filterChangeHandler} defaultValue={"date"}>
+            <option value="date">Featured</option>
+            <option value="sale">Sales</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+          </select>
+        </div>
+        <div className={classes.contentContainer}>
           {/* make this nav fixed when the scroll reaches the top of content container */}
-          <nav style={style}>
+          <nav>
             <div>
               <h5>Men's</h5>
-              <Link to="/myProducts?cat=shirt">Shirts</Link>
-              <Link to="/myProducts?cat=shorts">Shorts</Link>
-              <Link to="/myProducts?cat=pants">Pants</Link>
-              <Link to="/myProducts?cat=hats">Hats</Link>
+              <NavLink activeClassName={a1} to="/myProducts?cat=shirt">
+                Shirts<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a2} to="/myProducts?cat=shorts">
+                Shorts<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a3} to="/myProducts?cat=pants">
+                Pants<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a4} to="/myProducts?cat=hats">
+                Hats
+              </NavLink>
             </div>
             <div>
               <h5>Women's</h5>
-              <Link to="/myProducts?cat=tops">Tops</Link>
-              <Link to="/myProducts?cat=dresses">Dresses</Link>
-              <Link to="/myProducts?cat=skirts">Skirts</Link>
-              <Link to="/myProducts?cat=leggings">Leggings</Link>
+              <NavLink activeClassName={a5} to="/myProducts?cat=tops">
+                Tops<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a6} to="/myProducts?cat=dresses">
+                Dresses<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a7} to="/myProducts?cat=skirts">
+                Skirts<span>|</span>
+              </NavLink>
+              <NavLink activeClassName={a8} to="/myProducts?cat=leggings">
+                Leggings
+              </NavLink>
             </div>
           </nav>
 
@@ -179,7 +234,6 @@ const ProductsLayout = (props) => {
             {content}
           </div>
         </div>
-        <div ref={bottomRef}></div>
       </div>
     </Fragment>
   );

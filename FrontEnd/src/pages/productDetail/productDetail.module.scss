@@ -1,6 +1,8 @@
 @import "../../scss/variables.scss";
 
+// use calc here to cover empty space
 .container {
   max-width: $max-width;
   margin: auto;
+  height: auto;
 }

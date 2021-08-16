@@ -26,9 +26,43 @@ const userSchema = new Schema({
           required: true,
         },
         quantity: { type: Number, required: true },
+        size: { type: String, required: true },
       },
     ],
   },
 });
 
+userSchema.methods.addToCart = function (product, qty, size) {
+  const cartProductIndex = this.cart.items.findIndex((cp) => {
+    return cp.productId.toString() === product._id.toString();
+  });
+  let newQuantity = qty;
+  const updatedCartItems = [...this.cart.items];
+
+  if (cartProductIndex >= 0) {
+    newQuantity = this.cart.items[cartProductIndex].quantity + qty;
+    updatedCartItems[cartProductIndex].quantity = newQuantity;
+  } else {
+    updatedCartItems.push({
+      productId: product._id,
+      quantity: newQuantity,
+      size: size,
+    });
+  }
+  const updatedCart = {
+    items: updatedCartItems,
+  };
+  this.cart = updatedCart;
+  return this.save();
+};
+
+userSchema.methods.removeFromCart = function (productId) {
+  console.log(productId);
+  const updatedCartItems = this.cart.items.filter((item) => {
+    console.log(item);
+    return item.productId.toString() !== productId.toString();
+  });
+  this.cart.items = updatedCartItems;
+  return this.save();
+};
 module.exports = mongoose.model("User", userSchema);

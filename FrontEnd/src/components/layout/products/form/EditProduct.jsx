@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { editProduct } from "../../../../store/admin/admin-actions.js";
 import { CgSoftwareUpload } from "react-icons/cg";
 import { generateBase64FromImage } from "../../../../util/image.js";
@@ -27,6 +28,9 @@ const EditProduct = (props) => {
   const jwt = useSelector((state) => state.auth.jwtToken);
   const product = useSelector((state) => state.admin.editProduct[0]);
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     if (product !== undefined) {
@@ -143,7 +147,7 @@ const EditProduct = (props) => {
     }
     if (e.target.name === "sale") {
       setSale(e.target.value);
-      setSalePrice(price - (price * e.target.value) / 100);
+      setSalePrice((price - (price * e.target.value) / 100).toFixed(2));
     }
   };
   const onSubmitHandler = (e) => {
@@ -168,6 +172,7 @@ const EditProduct = (props) => {
         product._id
       )
     );
+    window.location.reload();
   };
   return (
     <form className={classes.container} onSubmit={(e) => onSubmitHandler(e)}>
@@ -182,6 +187,7 @@ const EditProduct = (props) => {
           required
           onChange={inputChangeHandler}
           value={title}
+          minLength={5}
         />
       </div>
       {/* product color */}
@@ -195,6 +201,7 @@ const EditProduct = (props) => {
             required
             onChange={inputChangeHandler}
             value={color}
+            minLength={3}
           />
         </div>
         {/* price */}
@@ -282,6 +289,8 @@ const EditProduct = (props) => {
           onChange={inputChangeHandler}
           value={description}
           required
+          minLength={5}
+          maxLength={400}
         />
       </div>
       <div>

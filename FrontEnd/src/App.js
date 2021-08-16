@@ -7,6 +7,7 @@ import Shop from "./pages/shop/Shop.jsx";
 import Layout from "./components/layout/Layout.jsx";
 import Products from "./pages/products/Products.jsx";
 import ProductDetail from "./pages/productDetail/ProductDetail.jsx";
+import Cart from "./pages/cart/Cart.jsx";
 import NotFound from "./pages/notFound/NotFound.jsx";
 
 import { authActions } from "./store/auth/auth-slice.js";
@@ -59,6 +60,9 @@ const App = () => {
         )}
         <Route path="/productDetails/:productId">
           <ProductDetail />
+        </Route>
+        <Route path="/cart">
+          <Cart />
         </Route>
         <Route path="*">
           <NotFound />

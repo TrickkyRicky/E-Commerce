@@ -24,7 +24,6 @@ const shopRoute = require("./routes/shop.js");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(file);
     cb(null, "images");
   },
   filename: (req, file, cb) => {
@@ -33,7 +32,6 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  console.log("FILE FILTER CHECKER HERE:::::!:!!!! ", file);
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||

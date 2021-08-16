@@ -25,6 +25,9 @@
     a {
       width: 128px;
       margin: 0 1.5rem;
+      &:last-child {
+        width: 125px;
+      }
     }
     img {
       max-width: 100%;
@@ -36,6 +39,15 @@
     p {
       color: white;
       font-size: 1.15rem;
+    }
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .container {
+    .terms {
+      text-align: center;
+      padding: 0 1rem 1.5rem 1rem;
     }
   }
 }

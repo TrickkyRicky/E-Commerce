@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
   }
   //   split to get the headers token value
   const token = authHeader.split(" ")[1];
-  console.log("TOKEN IN MIDDLEWARE:", token);
   let decodedToken;
 
   // decode the token with the secret key pass

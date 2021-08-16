@@ -140,6 +140,7 @@ const AddProduct = (props) => {
         jwt
       )
     );
+    window.location.reload();
   };
   console.log(jwt);
   return (
@@ -175,6 +176,7 @@ const AddProduct = (props) => {
           required
           onChange={inputChangeHandler}
           value={title}
+          minLength={5}
         />
       </div>
       {/* product color */}
@@ -282,6 +284,8 @@ const AddProduct = (props) => {
           onChange={inputChangeHandler}
           value={description}
           required
+          minLength={5}
+          maxLength={400}
         />
       </div>
       <div>

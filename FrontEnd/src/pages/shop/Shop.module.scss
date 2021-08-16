@@ -5,10 +5,11 @@
   margin: auto;
 
   .imageContainer {
-    margin: 1.5rem 0;
-    width: 100%;
+    margin: 1.5rem auto;
+    width: 95%;
     position: relative;
     display: flex;
+    justify-content: center;
 
     h4 {
       display: flex;
@@ -36,6 +37,57 @@
       width: 100%;
       height: 380px;
       object-fit: cover;
+    }
+  }
+}
+
+@media only screen and (max-width: 1550px) {
+  .container {
+    max-width: $max-width2;
+  }
+}
+@media only screen and (max-width: 1450px) {
+  .container {
+    max-width: $max-width3;
+  }
+}
+@media only screen and (max-width: 1150px) {
+  .container {
+    max-width: $max-width4;
+  }
+}
+@media only screen and (max-width: 1020px) {
+  .container {
+    .imageContainer {
+      margin: 3rem auto;
+    }
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .container {
+    .imageContainer {
+      img {
+        height: 280px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .container {
+    max-width: 800px;
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .container {
+    .imageContainer {
+      h4 {
+        font-size: 6rem;
+      }
+      img {
+        height: 200px;
+      }
     }
   }
 }

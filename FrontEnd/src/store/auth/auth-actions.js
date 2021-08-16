@@ -14,8 +14,8 @@ export const postSignUp = (name, email, pass) => {
           password: pass,
         }),
       });
-      if (res.status === 422) {
-        throw new Error("Email is already in use");
+      if (res.status === 409) {
+        return await res.json();
       }
       if (res.status !== 200 && res.status !== 201) {
         console.log("Error!");
@@ -25,12 +25,21 @@ export const postSignUp = (name, email, pass) => {
     };
     try {
       const result = await putData();
+
+      if (result.message) {
+        if (result.message === "This email is already in use") {
+          dispatch(authActions.setErrorMsg("emailSU"));
+          throw new Error("email");
+        }
+      }
+
       authActions.setAuth(false);
       dispatch(
         authActions.successfulSignup({
           result: result,
         })
       );
+      return true;
     } catch (err) {
       console.log(err);
       authActions.setAuth(false);
@@ -53,11 +62,10 @@ export const postLogin = (email, pass) => {
         }),
       });
 
-      if (res.status === 422) {
-        throw new Error("Incorrect password or Email");
+      if (res.status === 401) {
+        return await res.json();
       }
       if (res.status !== 200 && res.status !== 201) {
-        console.log("Error!");
         throw new Error("Could not authenticate you!");
       }
       return await res.json();
@@ -65,11 +73,19 @@ export const postLogin = (email, pass) => {
 
     try {
       const result = await postData();
-      console.log(result.token);
+      if (result.message) {
+        if (result.message === "No user with this email exist") {
+          dispatch(authActions.setErrorMsg("email"));
+          throw new Error("email");
+        } else if (result.message === "Wrong Password") {
+          dispatch(authActions.setErrorMsg("pass"));
+          throw new Error("pass");
+        }
+      }
       localStorage.setItem("token", result.token);
       localStorage.setItem("userId", result.userId);
-      authActions.setLoading(false);
-      authActions.setAuth(true);
+      dispatch(authActions.setLoading(false));
+      dispatch(authActions.setAuth(true));
       dispatch(
         authActions.successLogin({
           jwtToken: result.token,
@@ -78,9 +94,8 @@ export const postLogin = (email, pass) => {
       );
       return true;
     } catch (err) {
-      console.log(err);
-      authActions.setLoading(false);
-      authActions.setAuth(false);
+      dispatch(authActions.setLoading(false));
+      dispatch(authActions.setAuth(false));
     }
   };
 };

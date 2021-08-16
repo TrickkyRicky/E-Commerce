@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { HiOutlineMail } from "react-icons/hi";
 import { BiLock } from "react-icons/bi";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { postLogin } from "../../../store/auth/auth-actions";
 import classes from "./Form.module.scss";
@@ -11,14 +13,42 @@ import classes from "./Form.module.scss";
 const FormLogin = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const isAuth = useSelector((state) => state.auth.isAuth);
-  console.log(isAuth);
+  const [valid, setValid] = useState(null);
+
+  const errMsg = useSelector((state) => state.auth.errorMsg);
 
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const [isFocus2, setIsFocus2] = useState(false);
   const [isFocus3, setIsFocus3] = useState(false);
+
+  let eChecker = null;
+  let pChecker = null;
+  const isValid = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  if (valid === true && email !== "") {
+    eChecker = <AiOutlineCheckCircle size="25" className={classes.checked} />;
+  } else if (valid === false && email !== "") {
+    eChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
+
+  if (errMsg === "email") {
+    eChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
+  if (errMsg === "pass") {
+    pChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
 
   const inputChangeHandler = (input) => {
     if (input.target.name === "email") {
@@ -42,9 +72,13 @@ const FormLogin = (props) => {
       setIsFocus3(true);
     }
   };
-  const onBlueHandler = (name) => {
+  const onBlurHandler = (name) => {
     if (name === "email") {
       setIsFocus2(false);
+      setValid(isValid(email));
+      if (email === "") {
+        setValid(null);
+      }
     }
     if (name === "pass") {
       setIsFocus3(false);
@@ -58,11 +92,17 @@ const FormLogin = (props) => {
     line.pass = classes.line2;
   }
 
+  console.log(location);
   const onSubmitHandler = async (e, email, pass) => {
     e.preventDefault();
     const isTrue = await dispatch(postLogin(email, pass));
+    if (location.state) {
+      if (isTrue && location.state.from.includes("productDetails")) {
+        history.goBack();
+      }
+    }
     if (isTrue) {
-      history.replace("/");
+      history.replace("/home");
     }
   };
 
@@ -86,8 +126,9 @@ const FormLogin = (props) => {
             onChange={inputChangeHandler}
             value={email}
             onFocus={() => onFocusHandler("email")}
-            onBlur={() => onBlueHandler("email")}
+            onBlur={() => onBlurHandler("email")}
           />
+          {eChecker}
         </div>
       </div>
       <div className={classes.content}>
@@ -102,8 +143,9 @@ const FormLogin = (props) => {
             onChange={inputChangeHandler}
             value={pass}
             onFocus={() => onFocusHandler("pass")}
-            onBlur={() => onBlueHandler("pass")}
+            onBlur={() => onBlurHandler("pass")}
           />
+          {pChecker}
         </div>
       </div>
       <div className={classes.forgot}>

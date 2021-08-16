@@ -3,17 +3,35 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { HiOutlineMail } from "react-icons/hi";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { postReset } from "../../../store/auth/auth-actions";
 import classes from "./Form.module.scss";
 
 const FormReset = (props) => {
   const [email, setEmail] = useState("");
+  const [valid, setValid] = useState(null);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [isFocus2, setIsFocus2] = useState(false);
+
+  let eChecker = null;
+
+  const isValid = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  if (valid === true && email !== "") {
+    eChecker = <AiOutlineCheckCircle size="25" className={classes.checked} />;
+  } else if (valid === false && email !== "") {
+    eChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
 
   const inputChangeHandler = (input) => {
     if (input.target.name === "email") {
@@ -33,6 +51,7 @@ const FormReset = (props) => {
   const onBlueHandler = (name) => {
     if (name === "email") {
       setIsFocus2(false);
+      setValid(isValid(email));
     }
   };
 
@@ -43,7 +62,7 @@ const FormReset = (props) => {
   const onSubmitHandler = (e, email) => {
     e.preventDefault();
     dispatch(postReset(email));
-    // history.replace("/auth");
+    history.replace("/auth");
   };
 
   return (
@@ -68,6 +87,7 @@ const FormReset = (props) => {
             onFocus={() => onFocusHandler("email")}
             onBlur={() => onBlueHandler("email")}
           />
+          {eChecker}
         </div>
       </div>
       <button>Send Email</button>

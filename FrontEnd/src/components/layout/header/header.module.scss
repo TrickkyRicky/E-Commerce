@@ -1,39 +1,64 @@
 @import "../../../scss/utility.scss";
 
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.25rem;
+  box-shadow: 0 2px 2px -2px lightgrey;
+  margin-bottom: 3px;
+  a {
+    font-size: 1.4rem;
+    text-decoration: none;
+    position: relative;
+    color: black;
+    font-weight: bold;
+  }
+  .logo {
+    font-size: 3.2rem;
+    padding: 0 2rem;
+    padding-bottom: 1.25rem;
+    color: #333;
+    // font-family: "WindSong", cursive;
+    font-family: "Bungee Outline", cursive;
+
+    // span {
+    //   font-family: "Bungee Outline", cursive;
+    // }
+  }
+}
 .container {
   background-color: white;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 1.25rem;
-  // margin-top: 1.5rem;
-  //   might have to find a change for this when jumbo menu is added
-  // overflow: hidden;
-  // border-bottom: 1px solid #e1e1e1;
-
+  // padding-top: 1.25rem;
+  margin-bottom: -3px;
   div:nth-child(1) {
     margin-left: 2rem;
     display: flex;
     align-items: center;
   }
+  // div:nth-child(2) {
+  //   a {
+  //     padding: 0;
+  //     margin: 0;
+  //     img {
+  //       width: 200px;
+  //       height: 55px;
+  //       object-fit: cover;
+  //     }
+  //   }
+  // }
   div:nth-child(2) {
-    a {
-      padding: 0;
-      img {
-        width: 200px;
-        height: 55px;
-        object-fit: cover;
-      }
-    }
-  }
-  div:nth-child(3) {
     margin-right: 2rem;
+    display: flex;
+    align-items: center;
   }
   a {
     font-size: 1.4rem;
     text-decoration: none;
-    padding: 2.1rem 0;
+    padding: 2.5rem 0;
     margin: 0 4rem;
     position: relative;
     color: black;
@@ -72,6 +97,12 @@
       transition: all 0.4s ease-in-out;
     }
   }
+
+  .bubble {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .relative {
@@ -79,7 +110,7 @@
 
   .overlay {
     width: 100%;
-    height: 90vh;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.52);
     position: absolute;
     z-index: 10;
@@ -94,7 +125,6 @@
     height: 45rem;
     background-color: white;
     display: flex;
-    padding-right: 2rem;
     justify-content: space-between;
     transform-origin: top;
     transform: scaleY(0);
@@ -102,12 +132,12 @@
     position: absolute;
     z-index: 11;
     border-top: 1px solid #e1e1e1;
-    padding: 6.4rem 4.5rem 3.2rem;
+    padding: 6.4rem 2rem 4.5rem 3.2rem;
 
     .categories {
-      margin-left: 4rem;
+      margin-left: 6rem;
       display: flex;
-      flex-basis: 12%;
+      flex-basis: 10%;
       flex-direction: column;
       justify-content: flex-start;
       transform: translateY(-20px);
@@ -133,6 +163,11 @@
           color: #b5aa8f;
         }
       }
+
+      .cat {
+        display: flex;
+        flex-direction: column;
+      }
     }
 
     .content {
@@ -153,7 +188,6 @@
 }
 
 .spacing {
-  padding: 0 4.5rem;
   animation: fadeIn 300ms linear;
 }
 
@@ -163,5 +197,41 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 1450px) {
+  .relative {
+    .contain {
+      height: 40rem;
+      .categories {
+        margin-left: 0rem;
+      }
+      .content {
+        align-items: flex-start;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1150px) {
+  .relative {
+    .contain {
+      height: 35rem;
+      .categories {
+        margin-left: 0rem;
+        flex-basis: 12%;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1020px) {
+  .logoContainer {
+    display: none;
+  }
+  .container {
+    display: none;
+  }
+  .relative {
+    display: none;
   }
 }

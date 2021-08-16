@@ -9,6 +9,7 @@ const authSlice = createSlice({
     isAuth: false,
     userIdReset: null,
     isLoading: false,
+    errorMsg: null,
   },
   reducers: {
     successfulSignup(state, action) {
@@ -40,6 +41,10 @@ const authSlice = createSlice({
       state.jwtToken = action.payload.jwtToken;
       state.userIdLogin = action.payload.userIdLogin;
       state.isAuth = action.payload.isAuth;
+    },
+    setErrorMsg(state, action) {
+      console.log(action.payload);
+      state.errorMsg = action.payload;
     },
   },
 });

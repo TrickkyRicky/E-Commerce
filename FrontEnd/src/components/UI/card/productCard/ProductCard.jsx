@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getEditProduct } from "../../../../store/admin/admin-actions.js";
 import { adminActions } from "../../../../store/admin/admin-slice.js";
@@ -30,18 +30,13 @@ const ProductCard = (props) => {
   };
 
   let hover = null;
-  let href = `productDetails/${props.id}`;
+  let href = `http://localhost:3000/productDetails/${props.id}`;
   let buttons = null;
-  let info = (
-    <div className={classes.productInfo}>
-      <h5>{props.title}</h5>
-      <p>in {props.color}</p>
-      <p>${props.price}</p>
-    </div>
-  );
+
   if (location.pathname.includes("myProducts") && props.disabled === false) {
     hover = classes.hover;
     href = null;
+ 
     buttons = (
       <Fragment>
         <button style={btn} onClick={editHandler}>
@@ -52,15 +47,19 @@ const ProductCard = (props) => {
         </button>
       </Fragment>
     );
+  }
 
-    info = (
-      <a href={`productDetails/${props.id}`}>
-        <div className={classes.productInfo}>
-          <h5>{props.title}</h5>
-          <p>in {props.color}</p>
-          <p>${props.price}</p>
-        </div>
-      </a>
+  let saleTag = null;
+  if (props.price) {
+    saleTag = <p className={classes.price}>${props.price.toFixed(2)}</p>;
+  }
+  if (props.sale) {
+    saleTag = (
+      <div className={classes.sale}>
+        <p className={classes.price}>${props.salePrice.toFixed(2)}</p>
+        <p className={classes.price}>${props.price.toFixed(2)} </p>
+        <span>{props.sale}% off</span>
+      </div>
     );
   }
 
@@ -87,7 +86,13 @@ const ProductCard = (props) => {
         </div>
       </a>
       {/* this div will take in content from the product information in db */}
-      {info}
+      <a href={`http://localhost:3000/productDetails/${props.id}`}>
+        <div className={classes.productInfo}>
+          <h5>{props.title}</h5>
+          <p>in {props.color}</p>
+          {saleTag}
+        </div>
+      </a>
     </div>
   );
 };

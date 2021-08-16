@@ -1,10 +1,11 @@
 // View the price and stats on the product screen
 import React, { useEffect } from "react";
-import ProductItem from "../../components/product/ProductItem";
+import ProductItem from "../../components/product/ProductItem.jsx";
 import classes from "./productDetail.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getProductDetail } from "../../store/shop/shop-actions";
+import Spinner from "../../components/UI/spinner/Spinner";
 
 const ProductDetail = () => {
   const history = useHistory();
@@ -16,16 +17,19 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (productId !== undefined) {
-      dispatch(getProductDetail(productId));
-    } else {
-      history.replace("/notFound");
+      dispatch(getProductDetail(productId)).then((isTrue) => {
+        if (!isTrue) {
+          history.replace("/*");
+        } else {
+          return;
+        }
+      });
     }
   }, [dispatch, productId, history]);
 
   // put loading component later
-  let content = "kaappa";
-  if (!isLoading) {
-    content = (
+  return (
+    <div className={classes.container}>
       <ProductItem
         id={product._id}
         price={product.price}
@@ -37,9 +41,8 @@ const ProductDetail = () => {
         sale={product.sale}
         salePrice={product.salePrice}
       />
-    );
-  }
-  return <div className={classes.container}>{content}</div>;
+    </div>
+  );
 };
 
 export default ProductDetail;

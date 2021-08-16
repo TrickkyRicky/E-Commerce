@@ -20,3 +20,29 @@
     margin: auto;
   }
 }
+
+@media only screen and (max-width: 1000px) {
+  .container {
+    .content {
+      flex-wrap: wrap;
+      width: 72%;
+
+      div {
+        padding-bottom: 1rem;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .container {
+    .content {
+      flex-wrap: wrap;
+      justify-content: center;
+
+      div {
+        padding-bottom: 1rem;
+      }
+    }
+  }
+}

@@ -1,13 +1,11 @@
 // navbar that will turn into a onHover jumbo dropdown for men link and woman link and conditional show my products for a a authenticated user and cart items
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import classes from "./Header.module.scss";
 import AnnouceBar from "./AnnounceBar.jsx";
-import Logo from "../../../assets/theLogo.png";
-import IMG from "../../../assets/ef3-placeholder-image.jpeg";
 import ProductCard from "../../UI/card/productCard/ProductCard.jsx";
-import LoadingCard from "../../UI/card/loadingCard/LoadingCard.jsx";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import { authActions } from "../../../store/auth/auth-slice";
 import { getProducts } from "../../../store/shop/shop-actions";
 
@@ -15,7 +13,12 @@ const Header = (props) => {
   const [show, setShow] = useState(false);
   const [picker, setPicker] = useState("men");
   const [content, setContent] = useState(null);
-  const [selected, setSelected] = useState(null);
+  const [mDisplay, setMDisplay] = useState({ display: "none" });
+  const [wDisplay, setWDisplay] = useState({ display: "none" });
+  const [active1, setActive1] = useState(null);
+  const [active2, setActive2] = useState(null);
+  const [active3, setActive3] = useState(null);
+  const [active4, setActive4] = useState(null);
 
   const isAuth = useSelector((state) => state.auth.isAuth);
   const tShirts = useSelector((state) => state.shop.tShirts);
@@ -30,29 +33,30 @@ const Header = (props) => {
   const location = useLocation();
   const history = useHistory();
 
+  const logoutHandler = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    dispatch(
+      authActions.unSetAuth({ jwtToken: null, userId: null, isAuth: false })
+    );
+  }, [dispatch]);
+
+  let log = (
+    <Link to="/auth" className={classes.link}>
+      Login
+    </Link>
+  );
+  if (isAuth) {
+    log = (
+      <Link to="/" onClick={logoutHandler} className={classes.link}>
+        Logout
+      </Link>
+    );
+  }
+
   useEffect(() => {
     dispatch(getProducts(location.pathname));
   }, [location, dispatch]);
-
-  const men = [
-    { val: "Shirts", href: "/shop?cat=shirt" },
-    { val: "Shorts", href: "/shop?cat=shorts" },
-    { val: "Pants", href: "/shop?cat=pants" },
-    { val: "Hats", href: "/shop?cat=hats" },
-  ];
-  const woman = [
-    { val: "Tops", href: "/shop?cat=tops" },
-    { val: "Dresses", href: "/shop?cat=dresses" },
-    { val: "Skirts", href: "/shop?cat=skirts" },
-    { val: "Leggings", href: "/shop?cat=leggings" },
-  ];
-
-  let choice;
-  if (picker === "woman") {
-    choice = woman;
-  } else {
-    choice = men;
-  }
 
   let expand = {};
   if (show) {
@@ -72,36 +76,17 @@ const Header = (props) => {
 
   let isHide;
 
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    dispatch(
-      authActions.unSetAuth({ jwtToken: null, userId: null, isAuth: false })
-    );
+  const clearActive = () => {
+    setActive1(null);
+    setActive2(null);
+    setActive3(null);
+    setActive4(null);
   };
 
-  useEffect(() => {
-    setContent(
-      <Fragment>
-        <div className={classes.spacing}>
-          <LoadingCard />
-        </div>
-        <div className={classes.spacing}>
-          <LoadingCard />
-        </div>
-        <div className={classes.spacing}>
-          <LoadingCard />
-        </div>
-        <div className={classes.spacing}>
-          <LoadingCard />
-        </div>
-      </Fragment>
-    );
-  }, []);
-
   const mouseHoverEvent = (cat) => {
+    clearActive();
     if (cat === "Shirts") {
-      setSelected("red");
+      setActive1({ color: "#b5aa8f" });
       setContent(
         tShirts.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -111,6 +96,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -119,7 +106,7 @@ const Header = (props) => {
     }
 
     if (cat === "Shorts") {
-      setSelected("green");
+      setActive2({ color: "#b5aa8f" });
       setContent(
         shorts.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -129,6 +116,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -136,6 +125,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Pants") {
+      setActive3({ color: "#b5aa8f" });
       setContent(
         pants.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -145,6 +135,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -152,6 +144,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Hats") {
+      setActive4({ color: "#b5aa8f" });
       setContent(
         hats.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -161,6 +154,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -168,6 +163,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Tops") {
+      setActive1({ color: "#b5aa8f" });
       setContent(
         tops.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -177,6 +173,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -184,6 +182,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Dresses") {
+      setActive2({ color: "#b5aa8f" });
       setContent(
         dresses.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -193,6 +192,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -200,6 +201,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Skirts") {
+      setActive3({ color: "#b5aa8f" });
       setContent(
         skirts.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -209,6 +211,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -216,6 +220,7 @@ const Header = (props) => {
       );
     }
     if (cat === "Leggings") {
+      setActive4({ color: "#b5aa8f" });
       setContent(
         leggings.map((product) => (
           <div className={classes.spacing} key={product._id}>
@@ -225,6 +230,8 @@ const Header = (props) => {
               title={product.title}
               color={product.color}
               price={product.price}
+              sale={product.sale}
+              salePrice={product.salePrice}
               disabled={true}
             />
           </div>
@@ -239,11 +246,21 @@ const Header = (props) => {
       <Fragment>
         <AnnouceBar />
         {/* content container */}
+        <div className={classes.logoContainer}>
+          <a href="/">
+            <h1 className={classes.logo}>
+              <span>s</span>ense
+            </h1>
+            {/* <img src={Logo} alt="Logo" /> */}
+          </a>
+        </div>
         <nav className={classes.container}>
           {/* content */}
           <div>
             <a
               onMouseOver={() => {
+                setWDisplay({ display: "none" });
+                setMDisplay({ display: "flex" });
                 setPicker("men");
                 setShow(true);
                 mouseHoverEvent("Shirts");
@@ -260,6 +277,8 @@ const Header = (props) => {
             </a>
             <a
               onMouseOver={() => {
+                setMDisplay({ display: "none" });
+                setWDisplay({ display: "flex" });
                 setPicker("woman");
                 setShow(true);
                 mouseHoverEvent("Tops");
@@ -267,7 +286,7 @@ const Header = (props) => {
               onMouseOut={() => setShow(false)}
               href="/shop/?cat=tops"
             >
-              Woman
+              Women
               {picker === "woman" ? (
                 <u style={expand.underline}></u>
               ) : (
@@ -279,25 +298,13 @@ const Header = (props) => {
             </a>
           </div>
           <div>
-            <a href="/">
-              <img src={Logo} alt="Logo" />
-            </a>
-          </div>
-          <div>
-            {isAuth ? (
-              <Link to="/" onClick={logoutHandler} className={classes.link}>
-                Logout
-              </Link>
-            ) : (
-              <Link to="/auth" className={classes.link}>
-                Login
-              </Link>
-            )}
+            {log}
             {/* Will show my products when Authenticated */}
             <a href="/myProducts?cat=shirt" className={classes.link}>
               My Products
             </a>
-            <a href="/" className={classes.link}>
+            <a href="/cart" className={`${classes.link} ${classes.bubble}`}>
+              <AiOutlineShoppingCart size="22" />
               Cart
             </a>
           </div>
@@ -312,16 +319,74 @@ const Header = (props) => {
             {/* product categories : based on the category hovered then we will display proper content*/}
             <div style={expand.prod} className={classes.categories}>
               <h4>Categories</h4>
-              {choice.map((catName, index) => (
-                <Link
-                  key={index}
-                  to={catName.href}
-                  onMouseOver={() => mouseHoverEvent(catName.val)}
+              <div style={mDisplay} className={classes.cat}>
+                <a
+                  style={active1}
+                  href="/shop?cat=shirt"
+                  onMouseOver={() => mouseHoverEvent("Shirts")}
                   className={classes.catFont}
                 >
-                  {catName.val}
-                </Link>
-              ))}
+                  Shirts
+                </a>
+                <a
+                  style={active2}
+                  href="/shop?cat=shorts"
+                  onMouseOver={() => mouseHoverEvent("Shorts")}
+                  className={classes.catFont}
+                >
+                  Shorts
+                </a>
+                <a
+                  style={active3}
+                  href="/shop?cat=pants"
+                  onMouseOver={() => mouseHoverEvent("Pants")}
+                  className={classes.catFont}
+                >
+                  Pants
+                </a>
+                <a
+                  style={active4}
+                  href="/shop?cat=hats"
+                  onMouseOver={() => mouseHoverEvent("Hats")}
+                  className={classes.catFont}
+                >
+                  Hats
+                </a>
+              </div>
+              <div style={wDisplay} className={classes.cat}>
+                <a
+                  style={active1}
+                  href="/shop?cat=tops"
+                  onMouseOver={() => mouseHoverEvent("Tops")}
+                  className={classes.catFont}
+                >
+                  Tops
+                </a>
+                <a
+                  style={active2}
+                  href="/shop?cat=dresses"
+                  onMouseOver={() => mouseHoverEvent("Dresses")}
+                  className={classes.catFont}
+                >
+                  Dresses
+                </a>
+                <a
+                  style={active3}
+                  href="/shop?cat=skirts"
+                  onMouseOver={() => mouseHoverEvent("Skirts")}
+                  className={classes.catFont}
+                >
+                  Skirts
+                </a>
+                <a
+                  style={active4}
+                  href="/shop?cat=leggings"
+                  onMouseOver={() => mouseHoverEvent("Leggings")}
+                  className={classes.catFont}
+                >
+                  Leggings
+                </a>
+              </div>
             </div>
             <div style={expand.prod} className={classes.content}>
               {content}

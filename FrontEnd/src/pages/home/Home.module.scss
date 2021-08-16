@@ -9,3 +9,45 @@
     border-bottom: 1px solid lightgrey;
   }
 }
+
+@media only screen and (max-width: 1550px) {
+  .container {
+    max-width: $max-width2;
+  }
+}
+@media only screen and (max-width: 1450px) {
+  .container {
+    max-width: $max-width3;
+  }
+}
+@media only screen and (max-width: 1150px) {
+  .container {
+    max-width: $max-width4;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .container {
+    max-width: 500px;
+
+    .line {
+      margin: 3rem 0;
+    }
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .container {
+    max-width: 300px;
+
+    .line {
+      margin: 3rem 0;
+    }
+  }
+}

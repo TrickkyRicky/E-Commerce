@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { HiOutlineMail } from "react-icons/hi";
 import { BiLock } from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { postSignUp } from "../../../store/auth/auth-actions";
 
@@ -18,9 +20,36 @@ const FormSignup = (props) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
 
+  const [valid, setValid] = useState(null);
+  const [nChecker, setNChecker] = useState(null);
+  const [pChecker, setPChecker] = useState(null);
+
   const [isFocus1, setIsFocus1] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
   const [isFocus3, setIsFocus3] = useState(false);
+
+  const errMsg = useSelector((state) => state.auth.errorMsg);
+
+  let eChecker = null;
+
+  const isValid = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  if (valid === true && email !== "") {
+    eChecker = <AiOutlineCheckCircle size="25" className={classes.checked} />;
+  } else if (valid === false && email !== "") {
+    eChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
+
+  if (errMsg === "emailSU") {
+    eChecker = (
+      <AiOutlineExclamationCircle size="25" className={classes.danger} />
+    );
+  }
 
   const inputChangeHandler = (input) => {
     if (input.target.name === "name") {
@@ -51,15 +80,36 @@ const FormSignup = (props) => {
       setIsFocus3(true);
     }
   };
-  const onBlueHandler = (name) => {
-    if (name === "name") {
+  const onBlurHandler = (value) => {
+    if (value === "name") {
       setIsFocus1(false);
+      if (name !== "" && name.length < 3) {
+        setNChecker(
+          <AiOutlineExclamationCircle size="25" className={classes.danger} />
+        );
+      } else if (name.length >= 3) {
+        setNChecker(
+          <AiOutlineCheckCircle size="25" className={classes.checked} />
+        );
+      } else {
+        setNChecker(null);
+      }
     }
-    if (name === "email") {
+    if (value === "email") {
       setIsFocus2(false);
+      setValid(isValid(email));
     }
-    if (name === "pass") {
+    if (value === "pass") {
       setIsFocus3(false);
+      if (pass !== "" && pass.length < 3) {
+        setPChecker(
+          <AiOutlineExclamationCircle size="25" className={classes.danger} />
+        );
+      } else if (pass.length >= 3) {
+        setPChecker(
+          <AiOutlineCheckCircle size="25" className={classes.checked} />
+        );
+      }
     }
   };
 
@@ -75,7 +125,8 @@ const FormSignup = (props) => {
 
   const onSubmitHandler = async (e, name, email, pass) => {
     e.preventDefault();
-    const isTrue = dispatch(postSignUp(name, email, pass));
+    const isTrue = await dispatch(postSignUp(name, email, pass));
+    console.log(isTrue);
     if (isTrue) {
       history.replace("/auth");
     }
@@ -102,8 +153,9 @@ const FormSignup = (props) => {
             onChange={inputChangeHandler}
             value={name}
             onFocus={() => onFocusHandler("name")}
-            onBlur={() => onBlueHandler("name")}
+            onBlur={() => onBlurHandler("name")}
           />
+          {nChecker}
         </div>
       </div>
       <div className={classes.content} style={{ marginBottom: "2.3rem" }}>
@@ -119,8 +171,9 @@ const FormSignup = (props) => {
             onChange={inputChangeHandler}
             value={email}
             onFocus={() => onFocusHandler("email")}
-            onBlur={() => onBlueHandler("email")}
+            onBlur={() => onBlurHandler("email")}
           />
+          {eChecker}
         </div>
       </div>
       <div className={classes.content}>
@@ -135,8 +188,9 @@ const FormSignup = (props) => {
             onChange={inputChangeHandler}
             value={pass}
             onFocus={() => onFocusHandler("pass")}
-            onBlur={() => onBlueHandler("pass")}
+            onBlur={() => onBlurHandler("pass")}
           />
+          {pChecker}
         </div>
       </div>
 

@@ -4,6 +4,8 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { BiLock } from "react-icons/bi";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 import { puthNewPass } from "../../../store/auth/auth-actions";
 import classes from "./Form.module.scss";
@@ -16,6 +18,7 @@ const FormNewPass = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [pChecker, setPChecker] = useState(null);
   const [isFocus3, setIsFocus3] = useState(false);
 
   const inputChangeHandler = (input) => {
@@ -36,6 +39,17 @@ const FormNewPass = (props) => {
   const onBlueHandler = (name) => {
     if (name === "pass") {
       setIsFocus3(false);
+      if (pass !== "" && pass.length < 3) {
+        setPChecker(
+          <AiOutlineExclamationCircle size="25" className={classes.danger} />
+        );
+      } else if (pass.length >= 3) {
+        setPChecker(
+          <AiOutlineCheckCircle size="25" className={classes.checked} />
+        );
+      } else {
+        setPChecker(null);
+      }
     }
   };
 
@@ -77,6 +91,7 @@ const FormNewPass = (props) => {
             onFocus={() => onFocusHandler("pass")}
             onBlur={() => onBlueHandler("pass")}
           />
+          {pChecker}
         </div>
       </div>
       <button>Reset</button>

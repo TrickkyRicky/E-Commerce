@@ -9,3 +9,27 @@
     }
   }
 }
+
+@media only screen and (max-width: 1150px) {
+  .wrapper {
+    .imgContainer {
+      height: 380px;
+    }
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .wrapper {
+    .imgContainer {
+      height: 250px;
+    }
+  }
+}
+
+@media only screen and (max-width: 520px) {
+  .wrapper {
+    .imgContainer {
+      height: 150px;
+    }
+  }
+}

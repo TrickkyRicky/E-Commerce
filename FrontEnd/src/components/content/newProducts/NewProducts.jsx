@@ -21,14 +21,18 @@ const NewProducts = (props) => {
   );
   if (!isLoading) {
     content = products.map((product) => (
-      <ProductCard
-        key={product._id}
-        id={product._id}
-        title={product.title}
-        img={product.imageUrl}
-        price={product.price}
-        color={product.color}
-      />
+      <div key={product._id}>
+        <ProductCard
+          key={product._id}
+          id={product._id}
+          title={product.title}
+          img={product.imageUrl}
+          price={product.price}
+          color={product.color}
+          sale={product.sale}
+          salePrice={product.salePrice}
+        />
+      </div>
     ));
   }
 

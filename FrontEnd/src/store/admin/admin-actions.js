@@ -89,6 +89,9 @@ export const addProduct = (
       );
     } catch (err) {
       console.log(err);
+      dispatch(
+        adminActions.setErrorMsg("Could not create product please try again")
+      );
     }
   };
 };
@@ -115,6 +118,11 @@ export const getEditProduct = (jwt, id) => {
       console.log(result);
       dispatch(
         adminActions.setEditProduct({
+          product: result.product,
+        })
+      );
+      dispatch(
+        adminActions.setDeleteProduct({
           product: result.product,
         })
       );
@@ -191,6 +199,9 @@ export const editProduct = (
       );
     } catch (err) {
       console.log(err);
+      dispatch(
+        adminActions.setErrorMsg("Could not edit product please try again")
+      );
     }
   };
 };
@@ -229,7 +240,103 @@ export const deleteProduct = (jwt, id) => {
       // dispatch(adminActions.setLoading(false));
     } catch (err) {
       console.log(err);
+      dispatch(adminActions.setErrorMsg({ error: err }));
       // dispatch(adminActions.setLoading(false));
+    }
+  };
+};
+
+export const getCart = (jwt) => {
+  return async (dispatch) => {
+    dispatch(adminActions.setLoading(true));
+
+    const getData = async () => {
+      const res = await fetch("http://localhost:8080/admin/get-cart", {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+      });
+
+      if (res.status !== 200) {
+        throw new Error("Failed to fetch user products");
+      }
+      return res.json();
+    };
+    try {
+      const result = await getData();
+      console.log(result.total);
+      dispatch(
+        adminActions.setCart({
+          cart: result.products,
+        })
+      );
+      dispatch(
+        adminActions.setTotal({
+          total: result.total,
+        })
+      );
+      dispatch(adminActions.setLoading(false));
+    } catch (err) {
+      console.log(err);
+      dispatch(adminActions.setLoading(false));
+    }
+  };
+};
+
+export const addCartProduct = (qty, id, jwt, size) => {
+  return async (dispatch) => {
+    const postData = async () => {
+      const res = await fetch("http://localhost:8080/admin/post-cart-item", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + jwt,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          qty: qty,
+          prodId: id,
+          size: size,
+        }),
+      });
+      if (res.status !== 201) {
+        throw new Error("Could not add product to cart");
+      }
+      return await res.json();
+    };
+    try {
+      const result = await postData();
+      console.log(result);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+};
+
+export const deleteCartProduct = (jwt, id) => {
+  return async (dispatch) => {
+    const deleteData = async () => {
+      const res = await fetch("http://localhost:8080/admin/delete-cart-item", {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + jwt,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prodId: id,
+        }),
+      });
+      if (res.status !== 201) {
+        throw new Error("Could not delete product to cart");
+      }
+      return await res.json();
+    };
+    try {
+      const result = await deleteData();
+      console.log(result);
+    } catch (err) {
+      console.log(err);
     }
   };
 };

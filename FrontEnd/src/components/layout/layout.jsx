@@ -2,6 +2,7 @@
 
 import React from "react";
 import Header from "./header/Header";
+import MobileHeader from "./mobileHeader/MobileHeader.jsx";
 import Footer from "./footer/Footer";
 import classes from "./Layout.module.scss";
 
@@ -9,7 +10,6 @@ import { useLocation } from "react-router-dom";
 
 const Layout = (props) => {
   const location = useLocation();
-  
   let noHeadOrFoot;
 
   if (location.pathname.includes("/auth")) {
@@ -21,6 +21,7 @@ const Layout = (props) => {
   return (
     <div className={classes.container}>
       <Header isAuth={noHeadOrFoot} />
+      <MobileHeader isAuth={noHeadOrFoot} />
       <main>{props.children}</main>
       <Footer isAuth={noHeadOrFoot} />
     </div>

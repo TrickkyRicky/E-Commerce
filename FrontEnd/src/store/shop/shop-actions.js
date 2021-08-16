@@ -103,8 +103,6 @@ export const getProductDetail = (id) => {
     };
     try {
       const result = await getData();
-      console.log(result);
-      console.log(result.product);
       dispatch(
         shopActions.setProduct({
           product: result.product,
@@ -115,20 +113,10 @@ export const getProductDetail = (id) => {
           loading: false,
         })
       );
+      return true;
     } catch (err) {
       console.log(err);
+      return false;
     }
   };
 };
-
-//   dispatch(
-//     shopActions.setAllIndividual({
-//       tShirts: filterProducts([...result.products], "shirt"),
-//       shorts: filterProducts([...result.products], "shorts"),
-//       pants: filterProducts([...result.products], "pants"),
-//       hats: filterProducts([...result.products], "hats"),
-//       tops: filterProducts([...result.products], "tops"),
-//       dresses: filterProducts([...result.products], "dresses"),
-//       skirts: filterProducts([...result.products], "skirts"),
-//       leggings: filterProducts([...result.products], "leggings"),
-//     })

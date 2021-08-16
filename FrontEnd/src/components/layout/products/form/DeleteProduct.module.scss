@@ -3,20 +3,24 @@
 
   h2 {
     padding-bottom: 3rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
+    span {
+      display: block;
+      color: red;
+    }
   }
 
   .btnContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     button {
       font-size: 1.6rem;
       font-weight: 600;
       color: #333;
       line-height: 1.2;
       text-transform: uppercase;
-      width: 50%;
-      height: 50px;
+      width: 40%;
+      height: 42px;
       cursor: pointer;
       outline: none;
       border: none;
@@ -25,7 +29,7 @@
       background-color: lightgrey;
 
       &:first-child {
-          margin-right: 1rem;
+        margin-right: 1rem;
       }
       &:first-child:hover {
         color: white;
@@ -36,6 +40,21 @@
         color: white;
         background-color: green;
         transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .container {
+    padding: 1rem;
+
+    h2 {
+      padding-bottom: 1.5rem;
+      font-size: 1.8rem;
+      span {
+        display: block;
+        color: red;
       }
     }
   }

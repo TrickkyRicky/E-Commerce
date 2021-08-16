@@ -8,6 +8,8 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 
+const { validationResult } = require("express-validator/check");
+
 require("dotenv").config();
 
 const User = require("../models/user.js");
@@ -23,10 +25,25 @@ const transporter = nodemailer.createTransport(
 exports.signup = async (req, res, next) => {
   //with the express.json parser in server.js we can parse incoming body req
   //   from the frontend form tags
-  const email = req.body.email;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+  const email = req.body.email.toLowerCase();
   const name = req.body.name;
   const password = req.body.password;
   try {
+    const checkUser = await User.findOne({ email: email });
+    // throw err if user exist already
+    if (checkUser) {
+      const error = new Error("This email is already in use");
+      error.statusCode = 409;
+      throw error;
+    }
     // encrypt password from body
     const hashedPass = await bcrypt.hash(password, 12);
 
@@ -71,7 +88,7 @@ exports.login = async (req, res, next) => {
     // compare encrypted passwords
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      const error = new Error("Wrong Password.");
+      const error = new Error("Wrong Password");
       error.statusCode = 401;
       throw error;
     }
@@ -156,6 +173,14 @@ exports.getNewPass = async (req, res, next) => {
 };
 
 exports.updateNewPass = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   const cryptoToken = req.body.cryptoToken;
   const newPass = req.body.password;
   const userId = req.body.userId;

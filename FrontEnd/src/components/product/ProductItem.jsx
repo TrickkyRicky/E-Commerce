@@ -1,12 +1,23 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
+import { addCartProduct } from "../../store/admin/admin-actions";
+import Spinner from "../UI/spinner/Spinner";
 import classes from "./ProductItem.module.scss";
 
 const ProductItem = (props) => {
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(1);
   const [sale, setSale] = useState(null);
+  const isLoading = useSelector((state) => state.shop.isLoading);
   const zoomRef = useRef();
   const imgRef = useRef();
   const selectRef = useRef();
+
+  const history = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const jwt = useSelector((state) => state.auth.jwtToken);
+  const isAuth = useSelector((state) => state.auth.isAuth);
 
   const moveLens = () => {
     let ratio = 2;
@@ -53,7 +64,7 @@ const ProductItem = (props) => {
     return { x: x, y: y };
   }
 
-  let option = ".";
+  let option = [{ value: null }];
   const options = [
     {
       oVal: "xsmall",
@@ -99,6 +110,11 @@ const ProductItem = (props) => {
     if (e.target.name === "quantity") {
       setQuantity(e.target.value);
     }
+
+    if (e.target.name === "size") {
+      console.log(e.target.value);
+      console.log(selectRef.current.value);
+    }
   };
 
   useEffect(() => {
@@ -106,64 +122,91 @@ const ProductItem = (props) => {
       setSale(props.salePrice);
     }
   }, [setSale, props.salePrice, props.sale]);
-
-  let saleTag = <p className={classes.price}>${props.price}</p>;
-  if (sale !== null) {
+  let saleTag = null;
+  if (props.price) {
+    saleTag = <p className={classes.price}>${props.price.toFixed(2)}</p>;
+  }
+  if (props.sale) {
     saleTag = (
       <div className={classes.sale}>
-        <p className={classes.price} style={{ textDecoration: "line-through" }}>
-          ${props.price}
-        </p>
-        <p className={classes.price}>
-          ${props.salePrice} <span>{props.sale}% off </span>
-        </p>
+        <p className={classes.price}>${props.salePrice.toFixed(2)}</p>
+        <p className={classes.price}>${props.price.toFixed(2)} </p>
+        <span>{props.sale}% off</span>
       </div>
     );
   }
 
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    if (isAuth) {
+      const isTrue = await dispatch(
+        addCartProduct(quantity, props.id, jwt, selectRef.current.value)
+      );
+      console.log(isTrue);
+      if (isTrue) {
+        history.push("/cart");
+      }
+    } else {
+      history.push({
+        pathname: "/auth",
+        state: {
+          from: location.pathname,
+        },
+      });
+    }
+  };
+
   //   will disable later due to quantity conditions
-  let disableBtn = true;
-
-  return (
-    <div className={classes.itemContainer}>
-      <div className={classes.imgContainer}>
-        <div
-          className={classes.lens}
-          ref={zoomRef}
-          onMouseMove={moveLens}
-        ></div>
-        <img
-          src={`http://localhost:8080/${props.img}`}
-          ref={imgRef}
-          onMouseMove={moveLens}
-          onTouchMove={moveLens}
-          alt={props.title}
-        />
-      </div>
-      <form className={classes.form}>
-        <h2>{props.title}</h2>
-        {/* <p className={classes.price}>${props.price}</p> */}
-        {saleTag}
-        <p className={classes.description}>{props.description}</p>
-        <div>
-          <p>Size:</p>
-          <select defaultValue="Select a Size">{option}</select>
-        </div>
-
-        <div>
-          <p>Quantity:</p>
-          <input
-            type="number"
-            value={quantity}
-            name="quantity"
-            onChange={inputChangeHandler}
+  let content = <Spinner />;
+  if (!isLoading) {
+    content = (
+      <Fragment>
+        <div className={classes.imgContainer}>
+          <div
+            className={classes.lens}
+            ref={zoomRef}
+            onMouseMove={moveLens}
+          ></div>
+          <img
+            src={`http://localhost:8080/${props.img}`}
+            ref={imgRef}
+            onMouseMove={moveLens}
+            onTouchMove={moveLens}
+            alt={props.title}
           />
         </div>
+        <form className={classes.form} onSubmit={onSubmitHandler}>
+          <h2>{props.title}</h2>
+          {/* <p className={classes.price}>${props.price}</p> */}
+          {saleTag}
+          <p className={classes.description}>{props.description}</p>
+          <div>
+            <p>Size:</p>
+            <select
+              value={option.oVal}
+              onChange={inputChangeHandler}
+              name="size"
+              ref={selectRef}
+            >
+              {option}
+            </select>
+          </div>
+          <div>
+            <p>Quantity:</p>
+            <input
+              type="number"
+              value={quantity}
+              name="quantity"
+              onChange={inputChangeHandler}
+            />
+          </div>
+          <button>{isAuth ? "Add To Cart" : "Login"}</button>
+        </form>
+      </Fragment>
+    );
+  }
 
-        <button disabled={disableBtn}>Add To Cart</button>
-      </form>
-    </div>
-  );
+  return <div className={classes.itemContainer}>{content}</div>;
 };
 
 export default ProductItem;

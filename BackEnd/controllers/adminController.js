@@ -1,19 +1,19 @@
 const fs = require("fs");
 const path = require("path");
 
+const { validationResult } = require("express-validator/check");
+
 const User = require("../models/user.js");
 const Product = require("../models/product.js");
 
 exports.getUserProduct = async (req, res, next) => {
   const categoryTag = req.query.cat;
-  console.log(categoryTag);
   try {
     const result = await Product.find({
       userId: req.userId,
       category: categoryTag,
-    });
+    }).sort({ createdAt: -1 });
 
-    console.log(result);
     res.status(200).json({
       message: "Products were successfully fetched",
       products: result,
@@ -32,8 +32,17 @@ exports.addUserProduct = async (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   const title = req.body.title;
-  const price = req.body.price;
+  const price = (+req.body.price).toFixed(2);
   const color = req.body.color;
   const xs = req.body.xs;
   const small = req.body.small;
@@ -82,7 +91,6 @@ exports.getEditProduct = async (req, res, next) => {
   try {
     const result = await Product.find({ _id: prodId, userId: req.userId });
 
-    console.log(result);
     res.status(200).json({
       message: "The product to edit was found",
       product: result,
@@ -96,9 +104,17 @@ exports.getEditProduct = async (req, res, next) => {
 };
 
 exports.editUserProduct = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Validation failed.");
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
+
   const prodId = req.params.productId;
   const title = req.body.title;
-  const price = req.body.price;
+  const price = (+req.body.price).toFixed(2);
   const color = req.body.color;
   const xs = req.body.xs;
   const small = req.body.small;
@@ -111,10 +127,18 @@ exports.editUserProduct = async (req, res, next) => {
   let imageUrl = req.body.image;
   let sale = undefined;
   let salePrice = undefined;
-  console.log(req.body.sale);
-  if (req.body.sale !== undefined && req.body.sale > 0) {
+
+  if (
+    req.body.sale !== undefined &&
+    req.body.sale > 0 &&
+    !isNaN(req.body.sale)
+  ) {
     sale = req.body.sale;
-    salePrice = req.body.sp;
+    salePrice = (+req.body.sp).toFixed(2);
+  }
+  if (req.body.sale > 50 || req.body.sale < 0) {
+    sale = undefined;
+    salePrice = undefined;
   }
 
   // checks to see if a file was sent meaning image would be change or could be the same
@@ -174,6 +198,7 @@ exports.deleteUserProduct = async (req, res, next) => {
   const prodId = req.params.productId;
   try {
     const product = await Product.findById(prodId);
+
     if (!product) {
       const error = new Error("Could not find product.");
       error.statusCode = 404;
@@ -186,13 +211,13 @@ exports.deleteUserProduct = async (req, res, next) => {
       throw error;
     }
 
+    const user = await User.findById(req.userId);
+    console.log(user);
+    await user.removeFromCart(prodId);
+
     clearImage(product.imageUrl);
 
     await Product.findByIdAndRemove(prodId);
-
-    // const user = await User.findById(req.userId);
-    // user.posts.pull(postId);
-    // await user.save();
 
     res.status(200).json({ message: "Deleted Product" });
   } catch (err) {
@@ -206,4 +231,80 @@ exports.deleteUserProduct = async (req, res, next) => {
 const clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
+};
+
+exports.getCart = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId).populate(
+      "cart.items.productId"
+    );
+    const products = user.cart.items;
+
+    let totalPrice = null;
+    products.forEach((prod) => {
+      console.log(prod);
+      if (prod.productId.salePrice) {
+        totalPrice += prod.productId.salePrice * prod.quantity;
+      } else {
+        totalPrice += prod.productId.price * prod.quantity;
+      }
+    });
+    res.status(200).json({
+      message: "Cart Retrieved",
+      products: products,
+      total: totalPrice.toFixed(2),
+    });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postCart = async (req, res, next) => {
+  const prodId = req.body.prodId;
+  const qty = req.body.qty;
+  const size = req.body.size;
+
+  try {
+    const product = await Product.findById(prodId);
+
+    if (qty > product.stock[size]) {
+      const error = new Error("Quantity is over the limit");
+      error.statusCode = 403;
+      throw error;
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("Not Authorized");
+      error.statusCode = 403;
+      throw error;
+    }
+    user.addToCart(product, qty, size);
+
+    res.status(201).json({ message: "Item added to cart" });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
+};
+
+exports.postCartDeleteProduct = async (req, res, next) => {
+  const prodId = req.body.prodId;
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("Not Authorized");
+      error.statusCode = 403;
+      throw error;
+    }
+    await user.removeFromCart(prodId);
+    res.status(201).json({ message: "Item deleted from cart" });
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  }
 };

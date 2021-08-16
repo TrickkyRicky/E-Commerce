@@ -153,3 +153,62 @@
     }
   }
 }
+
+.checked {
+  color: green;
+}
+
+.danger {
+  color: red;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 3rem 4rem;
+
+    h2 {
+      font-size: 2.6rem;
+      padding-bottom: 4rem;
+    }
+    .content {
+      margin-bottom: 2rem;
+    }
+
+    button {
+      margin-top: 2rem;
+    }
+
+    .forgot {
+      padding-top: 1rem;
+      padding-bottom: 2rem;
+    }
+
+    .signup {
+      padding-top: 4rem;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 320px) {
+  .container {
+    padding: 3rem;
+
+    h2 {
+      padding-bottom: 1.5rem;
+    }
+
+    button {
+      margin-top: 5px;
+    }
+
+    .forgot {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .signup {
+      padding-top: 2rem;
+    }
+  }
+}
