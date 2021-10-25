@@ -1,0 +1,9 @@
+@import "./variables.scss";
+
+%p-extend {
+  font-size: 1.2rem;
+  color: $secondary-color;
+  font-weight: bold;
+  font-family: $font-family;
+  letter-spacing: 1px;
+}

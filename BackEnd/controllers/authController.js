@@ -138,7 +138,7 @@ exports.reset = (req, res, next) => {
         subject: "Password reset",
         html: `
           <p>You requested a password reset</p>
-          <p>Click this <a href="http://localhost:3000/auth/newpass/${cryptoToken}">link</a> to set a new password.</p>
+          <p>Click this <a href="https://sense-clothing.herokuapp.com/auth/newpass/${cryptoToken}">link</a> to set a new password.</p>
         `,
       });
       res.status(200).json({ message: "Reset has been sent to email" });

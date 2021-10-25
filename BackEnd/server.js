@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 // used to parse incoming body req jpeg, jpg, png images for website
 const multer = require("multer");
+const cors = require("cors");
 
 const server = express();
 
@@ -45,11 +46,10 @@ const fileFilter = (req, file, cb) => {
 
 /* --------- middleware ---------- */
 
+server.use(cors());
+
 // might change back to bodyParser.json() <---is deprecated
 server.use(express.json());
-if (process.env.NODE_ENV === "production") {
-  server.use(express.static("../FrontEnd/build"));
-}
 // uses the defined filter and storage abouve to parse image into place
 server.use(
   multer({
@@ -77,6 +77,17 @@ server.use("/auth", authRoute);
 server.use("/admin", adminRoute);
 server.use("/shop", shopRoute);
 
+if (process.env.NODE_ENV === "production") {
+  server.use(express.static("FrontEnd/build"));
+  server.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../FrontEnd", "build", "index.html"));
+  });
+} else {
+  server.get("/", (req, res) => {
+    res.send("API RUNNING");
+  });
+}
+
 // error redirection middleware
 server.use((error, req, res, next) => {
   console.log(error);
@@ -85,7 +96,7 @@ server.use((error, req, res, next) => {
   const data = error.data;
   res.status(status).json({ message: message, data: data });
 });
-
+const port = process.env.PORT || 5000;
 mongoose
   .connect(process.env.DB_URI, {
     dbName: process.env.DB_NAME,
@@ -95,9 +106,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    server.listen(process.env.PORT || 8080);
+    server.listen(port);
   })
   .then(() => {
+    console.log(port);
     console.log("MONGO CONNECTED");
   })
   .catch(() => {
