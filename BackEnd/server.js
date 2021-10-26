@@ -97,6 +97,7 @@ server.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 const port = process.env.PORT || 5000;
+console.log(process.env);
 mongoose
   .connect(process.env.DB_URI, {
     dbName: process.env.DB_NAME,
