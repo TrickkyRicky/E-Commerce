@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import Layout from "./components/layout/Layout.jsx";
 import Home from "./pages/home/Home.jsx";
 import Shop from "./pages/shop/Shop.jsx";
 import Auth from "./pages/auth/Auth.jsx";
-import Layout from "./components/layout/Layout.jsx";
 import Products from "./pages/products/Products.jsx";
 import ProductDetail from "./pages/productDetail/ProductDetail.jsx";
 import Cart from "./pages/cart/Cart.jsx";
