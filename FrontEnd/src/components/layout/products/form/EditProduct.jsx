@@ -4,6 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { editProduct } from "../../../../store/admin/admin-actions.js";
 import { CgSoftwareUpload } from "react-icons/cg";
 import { generateBase64FromImage } from "../../../../util/image.js";
+import { dev } from "../../../../util/dev.js";
 import classes from "./AddProduct.module.scss";
 
 const EditProduct = (props) => {
@@ -40,7 +41,7 @@ const EditProduct = (props) => {
       setGender(product.gender);
       setCategory(product.category);
       setImage(product.imageUrl);
-      setImgVal(`http://localhost:8080/${product.imageUrl}`);
+      setImgVal(`${dev()}/${product.imageUrl}`);
       setDescription(product.description);
       setXsmall(product.stock.xsmall);
       setSmall(product.stock.small);

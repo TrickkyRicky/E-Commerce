@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCartProduct } from "../../../../store/admin/admin-actions";
+import { dev } from "../../../../util/dev";
 
 import classes from "./CartCard.module.scss";
 
@@ -13,7 +14,7 @@ const CartCard = (props) => {
   };
   return (
     <div className={classes.container}>
-      <img src={`http://localhost:8080/${props.imageUrl}`} alt={props.title} />
+      <img src={`${dev()}/${props.imageUrl}`} alt={props.title} />
       <div className={classes.content}>
         <h5>{props.title}</h5>
         <p>Price: ${props.price.toFixed(2)}</p>

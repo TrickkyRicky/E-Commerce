@@ -1,16 +1,14 @@
 import { adminActions } from "./admin-slice";
+import { dev } from "../../util/dev";
 
 export const getUserProducts = (category, jwt) => {
   return async (dispatch) => {
     const getData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/admin/get-product?cat=" + category,
-        {
-          headers: {
-            Authorization: "Bearer " + jwt,
-          },
-        }
-      );
+      const res = await fetch(dev() + "/admin/get-product?cat=" + category, {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+      });
 
       if (res.status !== 200) {
         throw new Error("Failed to fetch user products");
@@ -64,7 +62,7 @@ export const addProduct = (
     formData.append("large", large);
     formData.append("xl", xl);
     const postData = async () => {
-      const res = await fetch("http://localhost:8080/admin/add-product", {
+      const res = await fetch(dev() + "/admin/add-product", {
         method: "POST",
         headers: {
           Authorization: "Bearer " + jwt,
@@ -99,14 +97,11 @@ export const addProduct = (
 export const getEditProduct = (jwt, id) => {
   return async (dispatch) => {
     const getData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/admin/get-edit-product/" + id,
-        {
-          headers: {
-            Authorization: "Bearer " + jwt,
-          },
-        }
-      );
+      const res = await fetch(dev() + "/admin/get-edit-product/" + id, {
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+      });
 
       if (res.status !== 200) {
         throw new Error("Failed to fetch product to edit");
@@ -169,16 +164,13 @@ export const editProduct = (
     formData.append("sale", sale);
     formData.append("sp", salePrice);
     const putData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/admin/edit-product/" + id,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: "Bearer " + jwt,
-          },
-          body: formData,
-        }
-      );
+      const res = await fetch(dev() + "/admin/edit-product/" + id, {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+        body: formData,
+      });
       if (res.status === 422) {
         throw new Error("No file picked");
       }
@@ -209,15 +201,12 @@ export const editProduct = (
 export const deleteProduct = (jwt, id) => {
   return async (dispatch) => {
     const deleteData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/admin/delete-product/" + id,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + jwt,
-          },
-        }
-      );
+      const res = await fetch(dev() + "/admin/delete-product/" + id, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + jwt,
+        },
+      });
 
       if (res.status === 404) {
         throw new Error("Product not found");
@@ -251,7 +240,7 @@ export const getCart = (jwt) => {
     dispatch(adminActions.setLoading(true));
 
     const getData = async () => {
-      const res = await fetch("http://localhost:8080/admin/get-cart", {
+      const res = await fetch(dev() + "/admin/get-cart", {
         headers: {
           Authorization: "Bearer " + jwt,
         },
@@ -286,7 +275,7 @@ export const getCart = (jwt) => {
 export const addCartProduct = (qty, id, jwt, size) => {
   return async (dispatch) => {
     const postData = async () => {
-      const res = await fetch("http://localhost:8080/admin/post-cart-item", {
+      const res = await fetch(dev() + "/admin/post-cart-item", {
         method: "POST",
         headers: {
           Authorization: "Bearer " + jwt,
@@ -317,7 +306,7 @@ export const addCartProduct = (qty, id, jwt, size) => {
 export const deleteCartProduct = (jwt, id) => {
   return async (dispatch) => {
     const deleteData = async () => {
-      const res = await fetch("http://localhost:8080/admin/delete-cart-item", {
+      const res = await fetch(dev() + "/admin/delete-cart-item", {
         method: "DELETE",
         headers: {
           Authorization: "Bearer " + jwt,

@@ -1,5 +1,5 @@
 import { shopActions } from "./shop-slice";
-
+import { dev } from "../../util/dev";
 export const getProducts = (location) => {
   return async (dispatch) => {
     dispatch(
@@ -8,7 +8,7 @@ export const getProducts = (location) => {
       })
     );
     const getData = async () => {
-      const res = await fetch("http://localhost:8080/shop/products");
+      const res = await fetch(dev() + "/shop/products");
 
       if (res.status !== 200) {
         throw new Error("Failed to fetch products.");
@@ -56,9 +56,7 @@ export const getCatProducts = (cat) => {
       })
     );
     const getData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/shop/cat-products?cat=" + cat
-      );
+      const res = await fetch(dev() + "/shop/cat-products?cat=" + cat);
 
       if (res.status !== 200) {
         throw new Error("Failed to fetch products.");
@@ -92,9 +90,7 @@ export const getProductDetail = (id) => {
       })
     );
     const getData = async () => {
-      const res = await fetch(
-        "http://localhost:8080/shop/product-detail/" + id
-      );
+      const res = await fetch(dev() + "/shop/product-detail/" + id);
 
       if (res.status !== 200) {
         throw new Error("Failed to fetch products.");

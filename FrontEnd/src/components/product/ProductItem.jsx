@@ -4,6 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { addCartProduct } from "../../store/admin/admin-actions";
 import Spinner from "../UI/spinner/Spinner";
 import classes from "./ProductItem.module.scss";
+import { dev } from "../../util/dev";
 
 const ProductItem = (props) => {
   const [quantity, setQuantity] = useState(1);
@@ -168,7 +169,7 @@ const ProductItem = (props) => {
             onMouseMove={moveLens}
           ></div>
           <img
-            src={`http://localhost:8080/${props.img}`}
+            src={`${dev()}/${props.img}`}
             ref={imgRef}
             onMouseMove={moveLens}
             onTouchMove={moveLens}

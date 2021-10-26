@@ -1,9 +1,10 @@
 import { authActions } from "./auth-slice";
+import { dev } from "../../util/dev";
 
 export const postSignUp = (name, email, pass) => {
   return async (dispatch) => {
     const putData = async () => {
-      const res = await fetch("http://localhost:8080/auth/signup", {
+      const res = await fetch(dev() + "/auth/signup", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export const postLogin = (email, pass) => {
   authActions.setLoading(true);
   return async (dispatch) => {
     const postData = async () => {
-      const res = await fetch("http://localhost:8080/auth/login", {
+      const res = await fetch(dev() + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +104,7 @@ export const postLogin = (email, pass) => {
 export const postReset = (email) => {
   return async (dispatch) => {
     const postData = async () => {
-      const res = await fetch("http://localhost:8080/auth/reset", {
+      const res = await fetch(dev() + "/auth/reset", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +142,7 @@ export const postReset = (email) => {
 export const getNewPass = (token) => {
   return async (dispatch) => {
     const getData = async () => {
-      const res = await fetch("http://localhost:8080/auth/newpass/" + token);
+      const res = await fetch(dev() + "/auth/newpass/" + token);
       if (res.status === 401) {
         throw new Error("Token is expired, Please reset again");
       }
@@ -171,7 +172,7 @@ export const getNewPass = (token) => {
 export const puthNewPass = (pass, token, id) => {
   return async (dispatch) => {
     const putData = async () => {
-      const res = await fetch("http://localhost:8080/auth/newpass", {
+      const res = await fetch(dev() + "/auth/newpass", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

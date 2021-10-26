@@ -5,6 +5,7 @@ import { getEditProduct } from "../../../../store/admin/admin-actions.js";
 import { adminActions } from "../../../../store/admin/admin-slice.js";
 import classes from "./ProductCard.module.scss";
 import IMG from "../../../../assets/ef3-placeholder-image.jpeg";
+import { dev } from "../../../../util/dev.js";
 
 const ProductCard = (props) => {
   // if location includes myProducts we change the hover menu
@@ -30,13 +31,13 @@ const ProductCard = (props) => {
   };
 
   let hover = null;
-  let href = `http://localhost:8080/productDetails/${props.id}`;
+  let href = `${dev()}/productDetails/${props.id}`;
   let buttons = null;
 
   if (location.pathname.includes("myProducts") && props.disabled === false) {
     hover = classes.hover;
     href = null;
- 
+
     buttons = (
       <Fragment>
         <button style={btn} onClick={editHandler}>
@@ -80,13 +81,13 @@ const ProductCard = (props) => {
           {/* the img take will take in the props for the image from the array */}
           <img
             className={classes.image}
-            src={"http://localhost:8080/" + props.img}
+            src={dev() + "/" + props.img}
             alt={props.title}
           />
         </div>
       </a>
       {/* this div will take in content from the product information in db */}
-      <a href={`http://localhost:8080/productDetails/${props.id}`}>
+      <a href={`${dev()}/productDetails/${props.id}`}>
         <div className={classes.productInfo}>
           <h5>{props.title}</h5>
           <p>in {props.color}</p>
