@@ -92,7 +92,6 @@ const FormLogin = (props) => {
     line.pass = classes.line2;
   }
 
-  console.log(location);
   const onSubmitHandler = async (e, email, pass) => {
     e.preventDefault();
     const isTrue = await dispatch(postLogin(email, pass));

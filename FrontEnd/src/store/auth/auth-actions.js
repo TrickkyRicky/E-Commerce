@@ -125,7 +125,6 @@ export const postReset = (email) => {
     };
     try {
       const result = await postData();
-      console.log(result);
       authActions.setAuth(false);
       dispatch(
         authActions.successReset({
@@ -154,7 +153,6 @@ export const getNewPass = (token) => {
     };
     try {
       const result = await getData();
-      console.log(result);
       authActions.setAuth(false);
       dispatch(
         authActions.setTokenAndUser({
@@ -194,7 +192,6 @@ export const puthNewPass = (pass, token, id) => {
     };
     try {
       const result = await putData();
-      console.log(result);
       authActions.setAuth(false);
       dispatch(
         authActions.successPassReset({

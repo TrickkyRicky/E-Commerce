@@ -6,8 +6,6 @@ import classes from "./DeleteProduct.module.scss";
 
 const DeleteProduct = (props) => {
   const product = useSelector((state) => state.admin.deleteProduct[0]);
-
-  console.log(product);
   const jwt = useSelector((state) => state.auth.jwtToken);
   const dispatch = useDispatch();
 

@@ -57,7 +57,7 @@ const filterHelper = (filterParam, arr) => {
 const shopSlice = createSlice({
   name: "shop",
   initialState: {
-    allProducts: [{ prod: null }],
+    allProducts: [],
     recentItems: [],
     productDetail: {
       _id: null,
@@ -70,7 +70,7 @@ const shopSlice = createSlice({
       sale: null,
       salePrice: null,
     },
-    catProducts: [{ prod: null }],
+    catProducts: [],
     tShirts: [],
     shorts: [],
     pants: [],

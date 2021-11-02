@@ -143,7 +143,6 @@ const ProductItem = (props) => {
       const isTrue = await dispatch(
         addCartProduct(quantity, props.id, jwt, selectRef.current.value)
       );
-      console.log(isTrue);
       if (isTrue) {
         history.push("/cart");
       }
@@ -157,6 +156,10 @@ const ProductItem = (props) => {
     }
   };
 
+  let source = "";
+  if (props.img) {
+    source = `${dev()}/${props.img}`;
+  }
   //   will disable later due to quantity conditions
   let content = <Spinner />;
   if (!isLoading) {
@@ -169,7 +172,7 @@ const ProductItem = (props) => {
             onMouseMove={moveLens}
           ></div>
           <img
-            src={`${dev()}/${props.img}`}
+            src={source}
             ref={imgRef}
             onMouseMove={moveLens}
             onTouchMove={moveLens}

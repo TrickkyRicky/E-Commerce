@@ -52,7 +52,7 @@ const adminSlice = createSlice({
     modal: false,
     modalE: false,
     modalD: false,
-    products: [{ prod: null }],
+    products: [],
     editProduct: [],
     deleteProduct: [{ title: null }],
     isLoading: false,

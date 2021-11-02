@@ -300,9 +300,11 @@ const Header = (props) => {
           <div>
             {log}
             {/* Will show my products when Authenticated */}
-            <a href="/myProducts?cat=shirt" className={classes.link}>
-              My Products
-            </a>
+            {isAuth === true ? (
+              <a href="/myProducts?cat=shirt" className={classes.link}>
+                My Products
+              </a>
+            ) : null}
             <a href="/cart" className={`${classes.link} ${classes.bubble}`}>
               <AiOutlineShoppingCart size="22" />
               Cart

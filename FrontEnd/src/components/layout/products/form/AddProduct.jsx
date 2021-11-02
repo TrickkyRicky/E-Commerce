@@ -142,9 +142,9 @@ const AddProduct = (props) => {
     );
     window.location.reload();
   };
-  console.log(jwt);
   return (
     <form
+      encType="multipart/form-data"
       className={classes.container}
       onSubmit={(e) =>
         onSubmitHandler(

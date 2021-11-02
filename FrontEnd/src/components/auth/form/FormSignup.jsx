@@ -126,7 +126,6 @@ const FormSignup = (props) => {
   const onSubmitHandler = async (e, name, email, pass) => {
     e.preventDefault();
     const isTrue = await dispatch(postSignUp(name, email, pass));
-    console.log(isTrue);
     if (isTrue) {
       history.replace("/auth");
     }

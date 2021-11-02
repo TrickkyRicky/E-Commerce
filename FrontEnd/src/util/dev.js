@@ -1,10 +1,15 @@
-export const dev = () => {
+export const dev = (link) => {
   const heroku = "https://sense-clothing.herokuapp.com";
   const local = "http://localhost:8080";
-  const development = false;
+  const localReact = "http://localhost:3000";
+  const development = true;
 
   if (development) {
-    return local;
+    if (link) {
+      return localReact;
+    } else {
+      return local;
+    }
   } else {
     return heroku;
   }

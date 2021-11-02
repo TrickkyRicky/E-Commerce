@@ -48,6 +48,7 @@ export const addProduct = (
   return async (dispatch) => {
     // since im using a file and text i must use formData to pass mixed content into
     // the rest api or the files get to big and CORS errors
+    console.log(image);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("color", color);
@@ -61,6 +62,10 @@ export const addProduct = (
     formData.append("med", med);
     formData.append("large", large);
     formData.append("xl", xl);
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
     const postData = async () => {
       const res = await fetch(dev() + "/admin/add-product", {
         method: "POST",
@@ -79,7 +84,6 @@ export const addProduct = (
     };
     try {
       const result = await postData();
-      console.log(result);
       dispatch(
         adminActions.successfulCreation({
           result: result,
@@ -110,7 +114,6 @@ export const getEditProduct = (jwt, id) => {
     };
     try {
       const result = await getData();
-      console.log(result);
       dispatch(
         adminActions.setEditProduct({
           product: result.product,
@@ -240,6 +243,7 @@ export const getCart = (jwt) => {
     dispatch(adminActions.setLoading(true));
 
     const getData = async () => {
+      console.log(jwt);
       const res = await fetch(dev() + "/admin/get-cart", {
         headers: {
           Authorization: "Bearer " + jwt,
@@ -253,7 +257,6 @@ export const getCart = (jwt) => {
     };
     try {
       const result = await getData();
-      console.log(result.total);
       dispatch(
         adminActions.setCart({
           cart: result.products,
@@ -294,7 +297,6 @@ export const addCartProduct = (qty, id, jwt, size) => {
     };
     try {
       const result = await postData();
-      console.log(result);
       return true;
     } catch (err) {
       console.log(err);
@@ -323,7 +325,6 @@ export const deleteCartProduct = (jwt, id) => {
     };
     try {
       const result = await deleteData();
-      console.log(result);
     } catch (err) {
       console.log(err);
     }

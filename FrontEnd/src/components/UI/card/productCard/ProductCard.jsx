@@ -31,7 +31,7 @@ const ProductCard = (props) => {
   };
 
   let hover = null;
-  let href = `${dev()}/productDetails/${props.id}`;
+  let href = `${dev(true)}/productDetails/${props.id}`;
   let buttons = null;
 
   if (location.pathname.includes("myProducts") && props.disabled === false) {
@@ -87,7 +87,7 @@ const ProductCard = (props) => {
         </div>
       </a>
       {/* this div will take in content from the product information in db */}
-      <a href={`${dev()}/productDetails/${props.id}`}>
+      <a href={`${dev(true)}/productDetails/${props.id}`}>
         <div className={classes.productInfo}>
           <h5>{props.title}</h5>
           <p>in {props.color}</p>

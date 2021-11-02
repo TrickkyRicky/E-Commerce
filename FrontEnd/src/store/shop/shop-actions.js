@@ -48,7 +48,6 @@ export const getProducts = (location) => {
 };
 
 export const getCatProducts = (cat) => {
-  console.log(cat);
   return async (dispatch) => {
     dispatch(
       shopActions.setLoading({

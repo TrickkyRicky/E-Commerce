@@ -70,7 +70,9 @@ const SideBar = (props) => {
           <Link to="/shop" onClick={filterSales}>
             Sales
           </Link>
-          <a href="/myProducts?cat=shirt">My Products</a>
+          {isAuth === true ? (
+            <a href="/myProducts?cat=shirt">My Products</a>
+          ) : null}
           {log}
         </div>
       </nav>

@@ -63,7 +63,6 @@ const FormNewPass = (props) => {
   // }, [dispatch, token]);
 
   const onSubmitHandler = (e, pass, token, id) => {
-    console.log(pass, token, id);
     e.preventDefault();
     dispatch(puthNewPass(pass, token, id));
     history.replace("/auth");

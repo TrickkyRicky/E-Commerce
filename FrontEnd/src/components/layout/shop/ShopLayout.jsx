@@ -74,7 +74,7 @@ const ShopLayout = (props) => {
     ));
   }
 
-  if (!isLoading && cat !== null) {
+  if (!isLoading && cat !== null && catProducts) {
     content = catProducts.map((product) => (
       <div className={classes.spacing} key={product._id}>
         <ProductCard
