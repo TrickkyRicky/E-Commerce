@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 module.exports = (req, res, next) => {
-  // sets header for finding attached token from the frontend
-  // console.log(req.headers);
   const authHeader = req.get("Authorization");
   if (!authHeader) {
     const error = new Error("Not authenticated pt 1");

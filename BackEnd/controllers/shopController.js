@@ -26,7 +26,6 @@ exports.getCatProducts = async (req, res, next) => {
     const products = await Product.find({ category: cat }).sort({
       createdAt: -1,
     });
-    console.log(products);
     if (products.length <= 0) {
       const error = new Error("No Products in Db");
       error.statusCode = 204;

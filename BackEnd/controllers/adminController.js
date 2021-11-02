@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 
 const User = require("../models/user.js");
 const Product = require("../models/product.js");
@@ -212,7 +212,6 @@ exports.deleteUserProduct = async (req, res, next) => {
     }
 
     const user = await User.findById(req.userId);
-    console.log(user);
     await user.removeFromCart(prodId);
 
     clearImage(product.imageUrl);
@@ -229,7 +228,7 @@ exports.deleteUserProduct = async (req, res, next) => {
 };
 
 const clearImage = (filePath) => {
-  filePath = path.join(__dirname, "..", filePath);
+  filePath = path.join(__dirname, "..", "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
 };
 
@@ -242,7 +241,6 @@ exports.getCart = async (req, res, next) => {
 
     let totalPrice = null;
     products.forEach((prod) => {
-      console.log(prod);
       if (prod.productId.salePrice) {
         totalPrice += prod.productId.salePrice * prod.quantity;
       } else {
@@ -252,7 +250,7 @@ exports.getCart = async (req, res, next) => {
     res.status(200).json({
       message: "Cart Retrieved",
       products: products,
-      total: totalPrice.toFixed(2),
+      total: totalPrice ? totalPrice.toFixed(2) : 0,
     });
   } catch (err) {
     const error = new Error(err);

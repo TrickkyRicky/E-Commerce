@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 
-const { validationResult } = require("express-validator/check");
+const { validationResult } = require("express-validator");
 
 require("dotenv").config();
 

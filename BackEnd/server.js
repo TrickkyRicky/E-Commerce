@@ -60,6 +60,7 @@ server.use(
 );
 // serves images statically front end
 server.use("/images", express.static(path.join(__dirname, "images")));
+server.use("/images", express.static(path.join(__dirname, "../images")));
 
 // allows the use of REST from other clients on other Ports via the following request
 server.use((req, res, next) => {
@@ -97,7 +98,6 @@ server.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 const port = process.env.PORT || 5000;
-console.log(process.env);
 mongoose
   .connect(process.env.DB_URI, {
     dbName: process.env.DB_NAME,
