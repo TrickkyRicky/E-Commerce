@@ -48,7 +48,6 @@ export const addProduct = (
   return async (dispatch) => {
     // since im using a file and text i must use formData to pass mixed content into
     // the rest api or the files get to big and CORS errors
-    console.log(image);
     const formData = new FormData();
     formData.append("title", title);
     formData.append("color", color);
@@ -63,9 +62,6 @@ export const addProduct = (
     formData.append("large", large);
     formData.append("xl", xl);
 
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + " - " + pair[1]);
-    }
     const postData = async () => {
       const res = await fetch(dev() + "/admin/add-product", {
         method: "POST",
@@ -243,7 +239,6 @@ export const getCart = (jwt) => {
     dispatch(adminActions.setLoading(true));
 
     const getData = async () => {
-      console.log(jwt);
       const res = await fetch(dev() + "/admin/get-cart", {
         headers: {
           Authorization: "Bearer " + jwt,
