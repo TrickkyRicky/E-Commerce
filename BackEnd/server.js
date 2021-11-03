@@ -63,7 +63,7 @@ server.use(
 );
 // serves images statically front end
 server.use("/images", express.static(path.join(__dirname, "images")));
-server.use("/images", express.static(path.join(__dirname, "../images")));
+server.use("/images", express.static("images"));
 
 // allows the use of REST from other clients on other Ports via the following request
 server.use((req, res, next) => {
