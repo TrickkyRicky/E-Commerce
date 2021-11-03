@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 // used to parse incoming body req jpeg, jpg, png images for website
 const multer = require("multer");
 const cors = require("cors");
+const fs = require("fs");
 
 const server = express();
 
@@ -25,7 +26,9 @@ const shopRoute = require("./routes/shop.js");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    fs.mkdir("images", (err) => {
+      cb(null, "images");
+    });
   },
   filename: (req, file, cb) => {
     cb(null, new Date().toISOString() + "-" + file.originalname);
