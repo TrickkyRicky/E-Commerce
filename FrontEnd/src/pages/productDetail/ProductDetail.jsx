@@ -1,11 +1,10 @@
 // View the price and stats on the product screen
-import React, { useEffect } from "react";
-import ProductItem from "../../components/product/ProductItem.jsx";
-import classes from "./productDetail.module.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import ProductItem from "../../components/product/ProductItem.jsx";
 import { getProductDetail } from "../../store/shop/shop-actions";
-import Spinner from "../../components/UI/spinner/Spinner";
+import classes from "./productDetail.module.scss";
 
 const ProductDetail = () => {
   const history = useHistory();
@@ -13,7 +12,6 @@ const ProductDetail = () => {
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.shop.productDetail);
-  const isLoading = useSelector((state) => state.shop.isLoading);
 
   useEffect(() => {
     if (productId !== undefined) {
@@ -34,6 +32,7 @@ const ProductDetail = () => {
         id={product._id}
         price={product.price}
         img={product.imageUrl}
+        image={product.image}
         description={product.description}
         title={product.title}
         color={product.color}

@@ -64,6 +64,7 @@ const ShopLayout = (props) => {
         <ProductCard
           id={product._id}
           img={product.imageUrl}
+          image={product.image}
           title={product.title}
           color={product.color}
           price={product.price}
@@ -80,6 +81,7 @@ const ShopLayout = (props) => {
         <ProductCard
           id={product._id}
           img={product.imageUrl}
+          image={product.image}
           title={product.title}
           color={product.color}
           price={product.price}
@@ -198,10 +200,7 @@ const ShopLayout = (props) => {
         <nav>
           <div>
             <h5>Men's</h5>
-            <NavLink
-              to="/shop?cat=shirt"
-              activeClassName={a1}
-            >
+            <NavLink to="/shop?cat=shirt" activeClassName={a1}>
               Shirts<span>|</span>
             </NavLink>
             <NavLink activeClassName={a2} to="/shop?cat=shorts">
@@ -211,7 +210,7 @@ const ShopLayout = (props) => {
               Pants<span>|</span>
             </NavLink>
             <NavLink activeClassName={a4} to="/shop?cat=hats">
-              Hats 
+              Hats
             </NavLink>
           </div>
           <div>

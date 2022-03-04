@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { adminActions } from "../../../store/admin/admin-slice";
 import classes from "./Modals.module.scss";
 
 const DeleteModal = (props) => {
-  const isOpen = useSelector((state) => state.admin.modalD);
   const dispatch = useDispatch();
 
   const closeModalHandler = () => {

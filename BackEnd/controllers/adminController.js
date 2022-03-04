@@ -1,6 +1,3 @@
-const fs = require("fs");
-const path = require("path");
-
 const { validationResult } = require("express-validator");
 
 const User = require("../models/user.js");
@@ -52,7 +49,6 @@ exports.addUserProduct = async (req, res, next) => {
   const category = req.body.category;
   const gender = req.body.gender;
   const description = req.body.description;
-  const imageUrl = req.file.path;
 
   const product = new Product({
     title: title,
@@ -68,9 +64,15 @@ exports.addUserProduct = async (req, res, next) => {
     category: category,
     gender: gender,
     description: description,
-    imageUrl: imageUrl,
+    image: {
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    },
     userId: req.userId,
   });
+
+  // product.image.data = req.file.buffer;
+  // product.image.contentType = req.file.mimetype;
 
   try {
     await product.save();
@@ -79,6 +81,7 @@ exports.addUserProduct = async (req, res, next) => {
       product: product,
     });
   } catch (err) {
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -104,13 +107,13 @@ exports.getEditProduct = async (req, res, next) => {
 };
 
 exports.editUserProduct = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error("Validation failed.");
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+  // const errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   const error = new Error("Validation failed.");
+  //   error.statusCode = 422;
+  //   error.data = errors.array();
+  //   throw error;
+  // }
 
   const prodId = req.params.productId;
   const title = req.body.title;
@@ -124,7 +127,10 @@ exports.editUserProduct = async (req, res, next) => {
   const category = req.body.category;
   const gender = req.body.gender;
   const description = req.body.description;
-  let imageUrl = req.body.image;
+  let image;
+  if (!req.file) {
+    image = JSON.parse(req.body.image);
+  }
   let sale = undefined;
   let salePrice = undefined;
 
@@ -143,10 +149,10 @@ exports.editUserProduct = async (req, res, next) => {
 
   // checks to see if a file was sent meaning image would be change or could be the same
   if (req.file) {
-    imageUrl = req.file.path;
+    image = { data: req.file.buffer, contentType: req.file.mimetype };
   }
   // checks to see if somehow user deleted image in edit mode
-  if (!imageUrl) {
+  if (!image && !req.file) {
     const error = new Error("No file picked");
     error.statusCode = 422;
     throw error;
@@ -161,10 +167,6 @@ exports.editUserProduct = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
-    // checks if the image Url matches the one that is already saved
-    if (imageUrl !== product.imageUrl) {
-      clearImage(product.imageUrl);
-    }
 
     product.title = title;
     product.color = color;
@@ -177,7 +179,7 @@ exports.editUserProduct = async (req, res, next) => {
     product.category = category;
     product.gender = gender;
     product.description = description;
-    product.imageUrl = imageUrl;
+    product.image = image;
     product.sale = sale;
     product.salePrice = salePrice;
 
@@ -214,8 +216,6 @@ exports.deleteUserProduct = async (req, res, next) => {
     const user = await User.findById(req.userId);
     await user.removeFromCart(prodId);
 
-    clearImage(product.imageUrl);
-
     await Product.findByIdAndRemove(prodId);
 
     res.status(200).json({ message: "Deleted Product" });
@@ -225,11 +225,6 @@ exports.deleteUserProduct = async (req, res, next) => {
     }
     next(err);
   }
-};
-
-const clearImage = (filePath) => {
-  filePath = path.join(__dirname, "..", "..", filePath);
-  fs.unlink(filePath, (err) => console.log(err));
 };
 
 exports.getCart = async (req, res, next) => {

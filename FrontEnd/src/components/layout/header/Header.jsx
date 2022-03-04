@@ -1,7 +1,7 @@
 // navbar that will turn into a onHover jumbo dropdown for men link and woman link and conditional show my products for a a authenticated user and cart items
 import React, { Fragment, useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import classes from "./Header.module.scss";
 import AnnouceBar from "./AnnounceBar.jsx";
 import ProductCard from "../../UI/card/productCard/ProductCard.jsx";
@@ -31,7 +31,6 @@ const Header = (props) => {
   const leggings = useSelector((state) => state.shop.leggings);
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
 
   const logoutHandler = useCallback(() => {
     localStorage.removeItem("token");
@@ -93,6 +92,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -113,6 +113,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -132,6 +133,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -151,6 +153,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -170,6 +173,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -189,6 +193,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -208,6 +213,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}
@@ -227,6 +233,7 @@ const Header = (props) => {
             <ProductCard
               id={product._id}
               img={product.imageUrl}
+              image={product.image}
               title={product.title}
               color={product.color}
               price={product.price}

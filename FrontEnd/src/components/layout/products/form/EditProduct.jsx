@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
 import { editProduct } from "../../../../store/admin/admin-actions.js";
 import { CgSoftwareUpload } from "react-icons/cg";
 import { generateBase64FromImage } from "../../../../util/image.js";
@@ -30,9 +29,6 @@ const EditProduct = (props) => {
   const product = useSelector((state) => state.admin.editProduct[0]);
   const dispatch = useDispatch();
 
-  const location = useLocation();
-  const history = useHistory();
-
   useEffect(() => {
     if (product !== undefined) {
       setTitle(product.title);
@@ -40,8 +36,14 @@ const EditProduct = (props) => {
       setColor(product.color);
       setGender(product.gender);
       setCategory(product.category);
-      setImage(product.imageUrl);
-      setImgVal(`${dev()}/${product.imageUrl}`);
+      setImage(product.imageUrl ? product.imageUrl : product.image);
+      setImgVal(
+        product.imageUrl
+          ? `${dev()}/${product.imageUrl}`
+          : `data:${product.image.contentType};base64,${Buffer.from(
+              product.image.data.data
+            ).toString("base64")}`
+      );
       setDescription(product.description);
       setXsmall(product.stock.xsmall);
       setSmall(product.stock.small);

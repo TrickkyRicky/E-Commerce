@@ -156,9 +156,14 @@ const ProductItem = (props) => {
     }
   };
 
-  let source = "";
+  let source = null;
+
   if (props.img) {
     source = `${dev()}/${props.img}`;
+  } else if (props.image) {
+    source = `data:${props.image.contentType};base64,${Buffer.from(
+      props.image.data.data
+    ).toString("base64")}`;
   }
   //   will disable later due to quantity conditions
   let content = <Spinner />;

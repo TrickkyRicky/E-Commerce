@@ -12,9 +12,19 @@ const CartCard = (props) => {
     dispatch(deleteCartProduct(jwt, props.id));
     window.location.reload();
   };
+
   return (
     <div className={classes.container}>
-      <img src={`${dev()}/${props.imageUrl}`} alt={props.title} />
+      <img
+        src={
+          props.imageUrl
+            ? `${dev()}/${props.imageUrl}`
+            : `data:${props.image.contentType};base64,${Buffer.from(
+                props.image.data.data
+              ).toString("base64")}`
+        }
+        alt={props.title}
+      />
       <div className={classes.content}>
         <h5>{props.title}</h5>
         <p>Price: ${props.price.toFixed(2)}</p>

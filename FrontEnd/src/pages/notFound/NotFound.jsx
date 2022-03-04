@@ -1,7 +1,6 @@
 // Any route not found relays to this page
-import React, { Fragment } from "react";
+import React from "react";
 import classes from "./NotFound.module.scss";
-import roboImg from "../../assets/robot.jpg";
 import roboImg2 from "../../assets/Bots.jpeg";
 const NotFound = () => {
   return (

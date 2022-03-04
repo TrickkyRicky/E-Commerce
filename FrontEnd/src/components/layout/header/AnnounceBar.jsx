@@ -1,5 +1,5 @@
 // top of the screen Annouce Bar to signal users of possible sales. Should not show if not on the home page
-import React, { Fragment } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { shopActions } from "../../../store/shop/shop-slice";
@@ -24,9 +24,7 @@ const AnnounceBar = (props) => {
     // change for sidebar activity
     content = (
       <div className={classes.container2}>
-        <p>
-          First Time Buyer Sale, Get 30% Off.
-        </p>
+        <p>First Time Buyer Sale, Get 30% Off.</p>
       </div>
     );
   }

@@ -1,11 +1,10 @@
-import React, { useState, Fragment } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { getEditProduct } from "../../../../store/admin/admin-actions.js";
 import { adminActions } from "../../../../store/admin/admin-slice.js";
-import classes from "./ProductCard.module.scss";
-import IMG from "../../../../assets/ef3-placeholder-image.jpeg";
 import { dev } from "../../../../util/dev.js";
+import classes from "./ProductCard.module.scss";
 
 const ProductCard = (props) => {
   // if location includes myProducts we change the hover menu
@@ -81,7 +80,13 @@ const ProductCard = (props) => {
           {/* the img take will take in the props for the image from the array */}
           <img
             className={classes.image}
-            src={dev() + "/" + props.img}
+            src={
+              props.img
+                ? dev() + "/" + props.img
+                : `data:${props.image.contentType};base64,${Buffer.from(
+                    props.image.data.data
+                  ).toString("base64")}`
+            }
             alt={props.title}
           />
         </div>

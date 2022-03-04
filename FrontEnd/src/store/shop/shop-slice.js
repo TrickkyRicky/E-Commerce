@@ -68,6 +68,7 @@ const shopSlice = createSlice({
       price: null,
       stock: { xsmall: 0, small: 0, medium: 0, large: 0, xlarge: 0 },
       sale: null,
+      image: null,
       salePrice: null,
     },
     catProducts: [],
@@ -96,6 +97,7 @@ const shopSlice = createSlice({
       state.recentItems = [...action.payload.products.splice(0, 4)];
     },
     setProduct(state, action) {
+      console.log(action.payload.product);
       state.productDetail = { ...action.payload.product };
     },
     setCatProd(state, action) {

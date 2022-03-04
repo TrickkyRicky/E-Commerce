@@ -9,7 +9,6 @@ const mongoose = require("mongoose");
 // used to parse incoming body req jpeg, jpg, png images for website
 const multer = require("multer");
 const cors = require("cors");
-const fs = require("fs");
 
 const server = express();
 
@@ -23,17 +22,6 @@ const adminRoute = require("./routes/admin.js");
 const shopRoute = require("./routes/shop.js");
 
 /* --------- Image handling ---------- */
-
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    fs.mkdir("images", (err) => {
-      cb(null, "images");
-    });
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
-  },
-});
 
 const fileFilter = (req, file, cb) => {
   if (
@@ -57,13 +45,11 @@ server.use(express.json());
 server.use(
   multer({
     limits: { fieldSize: 25 * 1024 * 1024 },
-    storage: fileStorage,
     fileFilter: fileFilter,
   }).single("image")
 );
 // serves images statically front end
 server.use("/images", express.static(path.join(__dirname, "images")));
-server.use("/images", express.static("images"));
 
 // allows the use of REST from other clients on other Ports via the following request
 server.use((req, res, next) => {

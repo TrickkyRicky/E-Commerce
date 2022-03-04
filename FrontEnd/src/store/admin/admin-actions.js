@@ -148,12 +148,17 @@ export const editProduct = (
 ) => {
   return async (dispatch) => {
     const formData = new FormData();
+    console.log(image);
     formData.append("title", title);
     formData.append("color", color);
     formData.append("price", price);
     formData.append("gender", gender);
     formData.append("category", category);
-    formData.append("image", image);
+    if (image instanceof File) {
+      formData.append("image", image);
+    } else {
+      formData.append("image", JSON.stringify(image));
+    }
     formData.append("description", description);
     formData.append("xs", xs);
     formData.append("small", small);
@@ -291,7 +296,7 @@ export const addCartProduct = (qty, id, jwt, size) => {
       return await res.json();
     };
     try {
-      const result = await postData();
+      await postData();
       return true;
     } catch (err) {
       console.log(err);
@@ -319,7 +324,7 @@ export const deleteCartProduct = (jwt, id) => {
       return await res.json();
     };
     try {
-      const result = await deleteData();
+      await deleteData();
     } catch (err) {
       console.log(err);
     }

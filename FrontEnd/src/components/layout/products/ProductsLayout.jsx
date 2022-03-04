@@ -76,6 +76,7 @@ const ProductsLayout = (props) => {
         <ProductCard
           id={product._id}
           img={product.imageUrl}
+          image={product.image}
           title={product.title}
           color={product.color}
           price={product.price}

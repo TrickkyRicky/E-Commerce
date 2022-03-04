@@ -37,7 +37,11 @@ const productSchema = new Schema(
     },
     imageUrl: {
       type: String,
-      required: true,
+      required: false,
+    },
+    image: {
+      data: Buffer,
+      contentType: String,
     },
     sale: {
       type: Number,

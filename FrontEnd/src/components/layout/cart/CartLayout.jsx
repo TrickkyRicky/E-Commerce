@@ -51,6 +51,7 @@ const CartLayout = (props) => {
         key={prod._id}
         id={prod.productId._id}
         imageUrl={prod.productId.imageUrl}
+        image={prod.productId.image}
         title={prod.productId.title}
         price={checkPrice}
         color={prod.productId.color}
