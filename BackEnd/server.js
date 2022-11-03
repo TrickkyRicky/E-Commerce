@@ -107,6 +107,6 @@ mongoose
     console.log("DB_NAME: ", process.env.DB_NAME);
     console.log("DB_USERNAME: ", process.env.DB_USERNAME);
     console.log("DB_PASS: ", process.env.DB_PASS);
-    console.log("PORT: ", process.env.port);
+    console.log("PORT: ", process.env.PORT);
     console.log("WE DIDNT CONNECT");
   });
