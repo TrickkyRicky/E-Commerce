@@ -103,5 +103,10 @@ mongoose
     console.log("MONGO CONNECTED");
   })
   .catch(() => {
+    console.log("DB_URI: ", process.env.DB_URI);
+    console.log("DB_NAME: ", process.env.DB_NAME);
+    console.log("DB_USERNAME: ", process.env.DB_USERNAME);
+    console.log("DB_PASS: ", process.env.DB_PASS);
+    console.log("PORT: ", process.env.port);
     console.log("WE DIDNT CONNECT");
   });
