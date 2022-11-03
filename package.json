@@ -8,7 +8,7 @@
     "start:dev": "nodemon BackEnd/server.js",
     "start": "node BackEnd/server.js",
     "frontend": "npm run front --prefix FrontEnd",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm install --prefix FrontEnd && npm run build --prefix FrontEnd"
+    "front-build": "NPM_CONFIG_PRODUCTION=true npm install --prefix FrontEnd && npm run build --prefix FrontEnd"
   },
   "author": "",
   "license": "ISC",
